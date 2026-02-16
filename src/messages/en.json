@@ -1,0 +1,36 @@
+{
+  "app": {
+    "title": "Revenue Simulator",
+    "description": "Revenue simulator for indie developers"
+  },
+  "expense": {
+    "title": "Expenses",
+    "namePlaceholder": "Item name (e.g., Server)",
+    "amountPlaceholder": "Monthly (JPY)",
+    "addButton": "Add Expense",
+    "perMonth": "/mo"
+  },
+  "income": {
+    "title": "Income",
+    "namePlaceholder": "Item name (e.g., Ad Revenue)",
+    "amountPlaceholder": "Monthly (JPY)",
+    "addButton": "Add Income",
+    "perMonth": "/mo"
+  },
+  "period": {
+    "title": "Period & Growth",
+    "months": "Calculation Period (months)",
+    "growthRate": "Monthly Growth Rate (%)"
+  },
+  "chart": {
+    "title": "Revenue Simulation",
+    "expense": "Expenses",
+    "income": "Income",
+    "cumulativeProfit": "Cumulative Profit",
+    "month": "Month",
+    "amount": "Amount (JPY)"
+  },
+  "common": {
+    "delete": "Delete"
+  }
+}

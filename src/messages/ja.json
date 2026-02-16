@@ -1,0 +1,36 @@
+{
+  "app": {
+    "title": "Revenue Simulator",
+    "description": "個人開発者向け収益シミュレーター"
+  },
+  "expense": {
+    "title": "支出",
+    "namePlaceholder": "項目名（例: サーバー代）",
+    "amountPlaceholder": "月額（円）",
+    "addButton": "支出を追加",
+    "perMonth": "/月"
+  },
+  "income": {
+    "title": "収入",
+    "namePlaceholder": "項目名（例: 広告収入）",
+    "amountPlaceholder": "月額（円）",
+    "addButton": "収入を追加",
+    "perMonth": "/月"
+  },
+  "period": {
+    "title": "期間・成長設定",
+    "months": "計算期間（月）",
+    "growthRate": "月次成長率（%）"
+  },
+  "chart": {
+    "title": "収支シミュレーション",
+    "expense": "支出",
+    "income": "収入",
+    "cumulativeProfit": "累計損益",
+    "month": "月",
+    "amount": "金額（円）"
+  },
+  "common": {
+    "delete": "削除"
+  }
+}
