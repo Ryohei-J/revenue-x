@@ -8,15 +8,19 @@ import { Label } from "@/components/ui/label";
 type Props = {
   periodMonths: number;
   monthlyGrowthRate: number;
+  initialUsers: number;
   onPeriodChange: (months: number) => void;
   onGrowthRateChange: (rate: number) => void;
+  onInitialUsersChange: (users: number) => void;
 };
 
 export function PeriodCard({
   periodMonths,
   monthlyGrowthRate,
+  initialUsers,
   onPeriodChange,
   onGrowthRateChange,
+  onInitialUsersChange,
 }: Props) {
   const t = useTranslations("period");
 
@@ -26,6 +30,16 @@ export function PeriodCard({
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="initialUsers">{t("initialUsers")}</Label>
+          <Input
+            id="initialUsers"
+            type="number"
+            min={0}
+            value={initialUsers}
+            onChange={(e) => onInitialUsersChange(Number(e.target.value) || 0)}
+          />
+        </div>
         <div className="space-y-2">
           <Label htmlFor="periodMonths">{t("months")}</Label>
           <Input

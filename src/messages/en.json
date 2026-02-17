@@ -1,24 +1,39 @@
 {
   "app": {
-    "title": "Revenue Simulator",
+    "title": "RevenueX",
     "description": "Revenue simulator for indie developers"
   },
   "expense": {
     "title": "Expenses",
+    "fixedTitle": "Fixed Costs",
+    "variableTitle": "Variable Costs (per user)",
     "namePlaceholder": "Item name (e.g., Server)",
     "amountPlaceholder": "Monthly (JPY)",
-    "addButton": "Add Expense",
-    "perMonth": "/mo"
+    "variableNamePlaceholder": "Item name (e.g., API usage)",
+    "variableAmountPlaceholder": "Unit cost (JPY)",
+    "addFixedButton": "Add Fixed Cost",
+    "addVariableButton": "Add Variable Cost",
+    "perMonth": "/mo",
+    "perUserMonth": "/user/mo"
   },
   "income": {
     "title": "Income",
-    "namePlaceholder": "Item name (e.g., Ad Revenue)",
-    "amountPlaceholder": "Monthly (JPY)",
-    "addButton": "Add Income",
-    "perMonth": "/mo"
+    "subscriptionTitle": "Subscriptions",
+    "subscriptionNamePlaceholder": "Plan name (e.g., Pro Plan)",
+    "subscriptionAmountPlaceholder": "Monthly (JPY)",
+    "addSubscriptionButton": "Add Plan",
+    "perSubscriberMonth": "/sub/mo",
+    "conversionRate": "Conversion Rate (%)",
+    "churnRate": "Churn Rate (%)",
+    "adTitle": "Advertising",
+    "adNamePlaceholder": "Item name (e.g., Banner Ad)",
+    "adAmountPlaceholder": "Unit price (JPY)",
+    "addAdButton": "Add Ad",
+    "perUserMonth": "/user/mo"
   },
   "period": {
-    "title": "Period & Growth",
+    "title": "Users & Period",
+    "initialUsers": "Initial Users",
     "months": "Calculation Period (months)",
     "growthRate": "Monthly Growth Rate (%)"
   },

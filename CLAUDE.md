@@ -66,9 +66,9 @@ revenue-x/
 
 - 2グリッドレイアウト（左:右 = 4:8）
 - **左カラム**: 縦に3つのカードが並ぶ
-  1. **支出入力カード** - 項目名と月額を動的に追加・削除可能（例: サーバー代 ¥2,000/月）
+  1. **支出入力カード** - 固定費（項目名+月額）と変動費（項目名+ユーザーあたり月額）を動的に追加・削除可能
   2. **収入入力カード** - 項目名と月額を動的に追加・削除可能（例: 広告収入 ¥500/月）
-  3. **期間・成長設定カード** - 計算期間（月数）、月次成長率（%）の入力
+  3. **ユーザー・期間設定カード** - 初期ユーザー数、計算期間（月数）、月次成長率（%）の入力
 - **右カラム**: 1つのカードでグラフ表示
   - 積み上げ面グラフ（収入・支出を積み上げ、累計損益を折れ線で重ねる）
   - 横軸: 月、縦軸: 金額
@@ -76,27 +76,46 @@ revenue-x/
 ## データモデル
 
 ```typescript
-type ExpenseItem = {
+type FixedExpenseItem = {
   id: string;
   name: string;
   amount: number; // 月額（円）
 };
 
-type IncomeItem = {
+type VariableExpenseItem = {
   id: string;
   name: string;
-  amount: number; // 月額（円）
+  amount: number; // 1ユーザーあたり月額（円）
+};
+
+type SubscriptionItem = {
+  id: string;
+  name: string;
+  amount: number; // 1契約者あたり月額（円）
+  conversionRate: number; // 課金率（%）
+  churnRate: number;      // 解約率（%）
+};
+
+type AdItem = {
+  id: string;
+  name: string;
+  amount: number; // 1ユーザーあたり月額（円）
 };
 
 type SimulationConfig = {
-  expenses: ExpenseItem[];
-  incomes: IncomeItem[];
+  fixedExpenses: FixedExpenseItem[];
+  variableExpenses: VariableExpenseItem[];
+  subscriptions: SubscriptionItem[];
+  ads: AdItem[];
   periodMonths: number;       // 計算期間（月）
   monthlyGrowthRate: number;  // 月次成長率（%）
+  initialUsers: number;       // 初期ユーザー数
 };
 
 type MonthlyData = {
   month: number;
+  users: number;              // 当月ユーザー数
+  subscribers: number;        // 当月契約者数
   totalExpense: number;
   totalIncome: number;
   profit: number;             // 当月損益
@@ -106,8 +125,12 @@ type MonthlyData = {
 
 ## 成長モデル
 
-- 月次成長率（複利）で収入が増加: `収入_n = 初月収入 × (1 + 成長率/100)^n`
-- 支出は固定（成長に伴う変動は将来検討）
+- ユーザー数は月次成長率（複利）で増加: `ユーザー数_n = 初期ユーザー数 × (1 + 成長率/100)^(n-1)`
+- 契約者数: プランごとに独立して計算。毎月の新規ユーザー × 課金率 で新規契約、既存契約者 × 解約率 で解約
+- サブスク収入: `Σ(プランごとの契約者数 × プラン単価)`
+- 広告収入: `ユーザー数 × 広告単価合計`
+- 固定費は毎月一定
+- 変動費はユーザー数に比例: `変動費_n = ユーザーあたりコスト合計 × ユーザー数_n`
 
 ## コーディング規約
 

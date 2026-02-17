@@ -1,24 +1,43 @@
-export type ExpenseItem = {
+export type FixedExpenseItem = {
   id: string;
   name: string;
   amount: number; // 月額（円）
 };
 
-export type IncomeItem = {
+export type VariableExpenseItem = {
   id: string;
   name: string;
-  amount: number; // 月額（円）
+  amount: number; // 1ユーザーあたり月額（円）
+};
+
+export type SubscriptionItem = {
+  id: string;
+  name: string;
+  amount: number; // 1契約者あたり月額（円）
+  conversionRate: number; // 課金率（%）
+  churnRate: number; // 解約率（%）
+};
+
+export type AdItem = {
+  id: string;
+  name: string;
+  amount: number; // 1ユーザーあたり月額（円）
 };
 
 export type SimulationConfig = {
-  expenses: ExpenseItem[];
-  incomes: IncomeItem[];
+  fixedExpenses: FixedExpenseItem[];
+  variableExpenses: VariableExpenseItem[];
+  subscriptions: SubscriptionItem[];
+  ads: AdItem[];
   periodMonths: number; // 計算期間（月）
   monthlyGrowthRate: number; // 月次成長率（%）
+  initialUsers: number; // 初期ユーザー数
 };
 
 export type MonthlyData = {
   month: number;
+  users: number;
+  subscribers: number;
   totalExpense: number;
   totalIncome: number;
   profit: number; // 当月損益

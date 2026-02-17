@@ -25,22 +25,32 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-4">
           <ExpenseCard
-            expenses={sim.config.expenses}
-            onAdd={sim.addExpense}
-            onUpdate={sim.updateExpense}
-            onRemove={sim.removeExpense}
+            fixedExpenses={sim.config.fixedExpenses}
+            variableExpenses={sim.config.variableExpenses}
+            onAddFixed={sim.addFixedExpense}
+            onUpdateFixed={sim.updateFixedExpense}
+            onRemoveFixed={sim.removeFixedExpense}
+            onAddVariable={sim.addVariableExpense}
+            onUpdateVariable={sim.updateVariableExpense}
+            onRemoveVariable={sim.removeVariableExpense}
           />
           <IncomeCard
-            incomes={sim.config.incomes}
-            onAdd={sim.addIncome}
-            onUpdate={sim.updateIncome}
-            onRemove={sim.removeIncome}
+            subscriptions={sim.config.subscriptions}
+            ads={sim.config.ads}
+            onAddSubscription={sim.addSubscription}
+            onUpdateSubscription={sim.updateSubscription}
+            onRemoveSubscription={sim.removeSubscription}
+            onAddAd={sim.addAd}
+            onUpdateAd={sim.updateAd}
+            onRemoveAd={sim.removeAd}
           />
           <PeriodCard
             periodMonths={sim.config.periodMonths}
             monthlyGrowthRate={sim.config.monthlyGrowthRate}
+            initialUsers={sim.config.initialUsers}
             onPeriodChange={sim.setPeriodMonths}
             onGrowthRateChange={sim.setMonthlyGrowthRate}
+            onInitialUsersChange={sim.setInitialUsers}
           />
         </div>
         <div className="lg:col-span-8">

@@ -3,8 +3,10 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import type {
   SimulationConfig,
-  ExpenseItem,
-  IncomeItem,
+  FixedExpenseItem,
+  VariableExpenseItem,
+  SubscriptionItem,
+  AdItem,
   MonthlyData,
 } from "@/types";
 import { calculateSimulation } from "@/lib/calc";
@@ -37,26 +39,26 @@ export function useSimulation() {
     return calculateSimulation(config);
   }, [config]);
 
-  // --- 支出操作 ---
-  const addExpense = useCallback(() => {
+  // --- 固定費操作 ---
+  const addFixedExpense = useCallback(() => {
     setConfig((prev) => {
       if (!prev) return prev;
-      const newItem: ExpenseItem = {
+      const newItem: FixedExpenseItem = {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
       };
-      return { ...prev, expenses: [...prev.expenses, newItem] };
+      return { ...prev, fixedExpenses: [...prev.fixedExpenses, newItem] };
     });
   }, []);
 
-  const updateExpense = useCallback(
+  const updateFixedExpense = useCallback(
     (id: string, field: "name" | "amount", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
           ...prev,
-          expenses: prev.expenses.map((e) =>
+          fixedExpenses: prev.fixedExpenses.map((e) =>
             e.id === id ? { ...e, [field]: value } : e
           ),
         };
@@ -65,34 +67,37 @@ export function useSimulation() {
     []
   );
 
-  const removeExpense = useCallback((id: string) => {
+  const removeFixedExpense = useCallback((id: string) => {
     setConfig((prev) => {
       if (!prev) return prev;
-      return { ...prev, expenses: prev.expenses.filter((e) => e.id !== id) };
+      return {
+        ...prev,
+        fixedExpenses: prev.fixedExpenses.filter((e) => e.id !== id),
+      };
     });
   }, []);
 
-  // --- 収入操作 ---
-  const addIncome = useCallback(() => {
+  // --- 変動費操作 ---
+  const addVariableExpense = useCallback(() => {
     setConfig((prev) => {
       if (!prev) return prev;
-      const newItem: IncomeItem = {
+      const newItem: VariableExpenseItem = {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
       };
-      return { ...prev, incomes: [...prev.incomes, newItem] };
+      return { ...prev, variableExpenses: [...prev.variableExpenses, newItem] };
     });
   }, []);
 
-  const updateIncome = useCallback(
+  const updateVariableExpense = useCallback(
     (id: string, field: "name" | "amount", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
           ...prev,
-          incomes: prev.incomes.map((i) =>
-            i.id === id ? { ...i, [field]: value } : i
+          variableExpenses: prev.variableExpenses.map((e) =>
+            e.id === id ? { ...e, [field]: value } : e
           ),
         };
       });
@@ -100,10 +105,92 @@ export function useSimulation() {
     []
   );
 
-  const removeIncome = useCallback((id: string) => {
+  const removeVariableExpense = useCallback((id: string) => {
     setConfig((prev) => {
       if (!prev) return prev;
-      return { ...prev, incomes: prev.incomes.filter((i) => i.id !== id) };
+      return {
+        ...prev,
+        variableExpenses: prev.variableExpenses.filter((e) => e.id !== id),
+      };
+    });
+  }, []);
+
+  // --- サブスク操作 ---
+  const addSubscription = useCallback(() => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const newItem: SubscriptionItem = {
+        id: crypto.randomUUID(),
+        name: "",
+        amount: 0,
+        conversionRate: 5,
+        churnRate: 3,
+      };
+      return { ...prev, subscriptions: [...prev.subscriptions, newItem] };
+    });
+  }, []);
+
+  const updateSubscription = useCallback(
+    (
+      id: string,
+      field: "name" | "amount" | "conversionRate" | "churnRate",
+      value: string | number
+    ) => {
+      setConfig((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          subscriptions: prev.subscriptions.map((s) =>
+            s.id === id ? { ...s, [field]: value } : s
+          ),
+        };
+      });
+    },
+    []
+  );
+
+  const removeSubscription = useCallback((id: string) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        subscriptions: prev.subscriptions.filter((s) => s.id !== id),
+      };
+    });
+  }, []);
+
+  // --- 広告操作 ---
+  const addAd = useCallback(() => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const newItem: AdItem = {
+        id: crypto.randomUUID(),
+        name: "",
+        amount: 0,
+      };
+      return { ...prev, ads: [...prev.ads, newItem] };
+    });
+  }, []);
+
+  const updateAd = useCallback(
+    (id: string, field: "name" | "amount", value: string | number) => {
+      setConfig((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          ads: prev.ads.map((a) =>
+            a.id === id ? { ...a, [field]: value } : a
+          ),
+        };
+      });
+    },
+    []
+  );
+
+  const removeAd = useCallback((id: string) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      return { ...prev, ads: prev.ads.filter((a) => a.id !== id) };
     });
   }, []);
 
@@ -118,16 +205,27 @@ export function useSimulation() {
     );
   }, []);
 
+  const setInitialUsers = useCallback((users: number) => {
+    setConfig((prev) => (prev ? { ...prev, initialUsers: users } : prev));
+  }, []);
+
   return {
     config,
     chartData,
-    addExpense,
-    updateExpense,
-    removeExpense,
-    addIncome,
-    updateIncome,
-    removeIncome,
+    addFixedExpense,
+    updateFixedExpense,
+    removeFixedExpense,
+    addVariableExpense,
+    updateVariableExpense,
+    removeVariableExpense,
+    addSubscription,
+    updateSubscription,
+    removeSubscription,
+    addAd,
+    updateAd,
+    removeAd,
     setPeriodMonths,
     setMonthlyGrowthRate,
+    setInitialUsers,
   };
 }

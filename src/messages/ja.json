@@ -1,24 +1,39 @@
 {
   "app": {
-    "title": "Revenue Simulator",
+    "title": "RevenueX",
     "description": "個人開発者向け収益シミュレーター"
   },
   "expense": {
     "title": "支出",
+    "fixedTitle": "固定費",
+    "variableTitle": "変動費（ユーザーあたり）",
     "namePlaceholder": "項目名（例: サーバー代）",
     "amountPlaceholder": "月額（円）",
-    "addButton": "支出を追加",
-    "perMonth": "/月"
+    "variableNamePlaceholder": "項目名（例: API利用料）",
+    "variableAmountPlaceholder": "単価（円）",
+    "addFixedButton": "固定費を追加",
+    "addVariableButton": "変動費を追加",
+    "perMonth": "/月",
+    "perUserMonth": "/ユーザー/月"
   },
   "income": {
     "title": "収入",
-    "namePlaceholder": "項目名（例: 広告収入）",
-    "amountPlaceholder": "月額（円）",
-    "addButton": "収入を追加",
-    "perMonth": "/月"
+    "subscriptionTitle": "サブスクリプション",
+    "subscriptionNamePlaceholder": "プラン名（例: Proプラン）",
+    "subscriptionAmountPlaceholder": "月額（円）",
+    "addSubscriptionButton": "プランを追加",
+    "perSubscriberMonth": "/契約者/月",
+    "conversionRate": "課金率（%）",
+    "churnRate": "解約率（%）",
+    "adTitle": "広告",
+    "adNamePlaceholder": "項目名（例: バナー広告）",
+    "adAmountPlaceholder": "単価（円）",
+    "addAdButton": "広告を追加",
+    "perUserMonth": "/ユーザー/月"
   },
   "period": {
-    "title": "期間・成長設定",
+    "title": "ユーザー・期間設定",
+    "initialUsers": "初期ユーザー数",
     "months": "計算期間（月）",
     "growthRate": "月次成長率（%）"
   },
