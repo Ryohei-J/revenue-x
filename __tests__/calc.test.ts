@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { calculateSimulation } from "@/lib/calc";
-import type { SimulationConfig } from "@/types";
+import { calculateSimulation, findBreakEvenMonth } from "@/lib/calc";
+import type { SimulationConfig, MonthlyData } from "@/types";
 
 // ヘルパー: デフォルト値をマージ
 function makeConfig(
@@ -215,5 +215,96 @@ describe("calculateSimulation", () => {
     // 広告収入 = 200 × 10 = 2000
     expect(result[0].subscribers).toBe(10);
     expect(result[0].totalIncome).toBe(7000);
+  });
+});
+
+// ヘルパー: MonthlyDataを簡易生成
+function makeMonthlyData(
+  month: number,
+  cumulativeProfit: number
+): MonthlyData {
+  return {
+    month,
+    users: 0,
+    subscribers: 0,
+    totalExpense: 0,
+    totalIncome: 0,
+    profit: 0,
+    cumulativeProfit,
+  };
+}
+
+describe("findBreakEvenMonth", () => {
+  it("returns null for empty data", () => {
+    expect(findBreakEvenMonth([])).toBeNull();
+  });
+
+  it("returns null for single-element data", () => {
+    expect(findBreakEvenMonth([makeMonthlyData(1, -2000)])).toBeNull();
+  });
+
+  it("returns null when cumulative profit never becomes positive", () => {
+    const data = [
+      makeMonthlyData(1, -2000),
+      makeMonthlyData(2, -4200),
+      makeMonthlyData(3, -6620),
+    ];
+    expect(findBreakEvenMonth(data)).toBeNull();
+  });
+
+  it("returns null when cumulative profit starts positive", () => {
+    const data = [
+      makeMonthlyData(1, 4000),
+      makeMonthlyData(2, 8500),
+    ];
+    expect(findBreakEvenMonth(data)).toBeNull();
+  });
+
+  it("returns exact month when cumulative profit is 0 then positive", () => {
+    const data = [
+      makeMonthlyData(1, -2000),
+      makeMonthlyData(2, 0),
+      makeMonthlyData(3, 3000),
+    ];
+    // month 2: cumulativeProfit=0 (<=0), month 3: 3000 (>0)
+    // bep = 2 + (0-0)/(3000-0) = 2.0
+    expect(findBreakEvenMonth(data)).toBe(2);
+  });
+
+  it("interpolates BEP between two months", () => {
+    const data = [
+      makeMonthlyData(1, -2000),
+      makeMonthlyData(2, -1000),
+      makeMonthlyData(3, 1000),
+    ];
+    // bep = 2 + 1000/2000 = 2.5
+    expect(findBreakEvenMonth(data)).toBe(2.5);
+  });
+
+  it("returns only the first BEP when multiple crossings exist", () => {
+    const data = [
+      makeMonthlyData(1, -2000),
+      makeMonthlyData(2, 2000),
+      makeMonthlyData(3, -4000),
+      makeMonthlyData(4, 3000),
+    ];
+    // 最初の交差: month 1→2, bep = 1 + 2000/4000 = 1.5
+    expect(findBreakEvenMonth(data)).toBe(1.5);
+  });
+
+  it("works with calculateSimulation output end-to-end", () => {
+    const config = makeConfig({
+      fixedExpenses: [{ id: "1", name: "Server", amount: 10000 }],
+      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      periodMonths: 24,
+      monthlyGrowthRate: 20,
+      initialUsers: 100,
+    });
+    const data = calculateSimulation(config);
+    const bep = findBreakEvenMonth(data);
+    // 高い成長率なのでBEPが存在するはず
+    expect(bep).not.toBeNull();
+    expect(bep).toBeGreaterThan(0);
+    expect(bep).toBeLessThanOrEqual(24);
   });
 });

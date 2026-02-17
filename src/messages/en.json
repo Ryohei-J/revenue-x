@@ -42,6 +42,8 @@
     "expense": "Expenses",
     "income": "Income",
     "cumulativeProfit": "Cumulative Profit",
+    "users": "Users",
+    "bep": "BEP",
     "month": "Month",
     "amount": "Amount (JPY)"
   },

@@ -42,6 +42,8 @@
     "expense": "支出",
     "income": "収入",
     "cumulativeProfit": "累計損益",
+    "users": "ユーザー数",
+    "bep": "損益分岐点",
     "month": "月",
     "amount": "金額（円）"
   },

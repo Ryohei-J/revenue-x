@@ -83,3 +83,21 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
 
   return result;
 }
+
+// 損益分岐点（BEP）の月を探す。
+// cumulativeProfit が負→正に初めて転じる月を線形補間で返す。
+// BEPが存在しない場合は null を返す。
+export function findBreakEvenMonth(data: MonthlyData[]): number | null {
+  for (let i = 1; i < data.length; i++) {
+    const prev = data[i - 1];
+    const curr = data[i];
+    if (prev.cumulativeProfit <= 0 && curr.cumulativeProfit > 0) {
+      return (
+        prev.month +
+        (-prev.cumulativeProfit) /
+          (curr.cumulativeProfit - prev.cumulativeProfit)
+      );
+    }
+  }
+  return null;
+}
