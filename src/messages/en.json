@@ -75,6 +75,10 @@
       "label": "Max Deficit",
       "description": "Max capital needed"
     },
+    "finalMonthProfit": {
+      "label": "Final Month Profit",
+      "description": "Monthly P&L at end of simulation"
+    },
     "noData": "---"
   },
   "common": {
@@ -123,6 +127,17 @@
     "section6Content": "These Terms shall be governed by and construed in accordance with the laws of Japan.",
     "section7Title": "Changes to These Terms",
     "section7Content": "These Terms may be updated without prior notice. Continued use of the Service after changes constitutes acceptance of the revised Terms."
+  },
+  "breakdown": {
+    "expenseTitle": "Expense Breakdown",
+    "incomeTitle": "Income Breakdown",
+    "initialCost": "Initial Cost",
+    "fixedExpense": "Fixed Expense",
+    "variableExpense": "Variable Expense",
+    "transactionFee": "Transaction Fee",
+    "subscription": "Subscription",
+    "ad": "Advertising",
+    "noData": "No Data"
   },
   "legal": {
     "backToHome": "Back to Home"

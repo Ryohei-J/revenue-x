@@ -1,4 +1,4 @@
-import type { SimulationConfig, MonthlyData } from "@/types";
+import type { SimulationConfig, MonthlyData, BreakdownData } from "@/types";
 
 // 月次シミュレーションデータを計算する
 // ユーザー数: initialUsers × (1 + growthRate/100)^(n-1)
@@ -104,6 +104,83 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
 export function getMaxCumulativeDeficit(data: MonthlyData[]): number | null {
   if (data.length === 0) return null;
   return Math.min(...data.map((d) => d.cumulativeProfit));
+}
+
+// 期間全体の収支カテゴリ別合計を計算する。
+// 円グラフ用のデータ。
+export function calculateBreakdown(config: SimulationConfig): BreakdownData {
+  const {
+    initialCosts,
+    fixedExpenses,
+    variableExpenses,
+    transactionFees,
+    subscriptions,
+    ads,
+    periodMonths,
+    monthlyGrowthRate,
+    initialUsers,
+  } = config;
+
+  const initialCostTotal = initialCosts.reduce((sum, e) => sum + e.amount, 0);
+  const fixedExpensePerMonth = fixedExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const variableCostPerUser = variableExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalFeeRate = transactionFees.reduce((sum, f) => sum + f.rate, 0);
+  const adRevenuePerUser = ads.reduce((sum, a) => sum + a.amount, 0);
+  const growthMultiplier = 1 + monthlyGrowthRate / 100;
+
+  const prevSubscribersByPlan = new Map<string, number>();
+  for (const sub of subscriptions) {
+    prevSubscribersByPlan.set(sub.id, 0);
+  }
+
+  let totalInitialCost = 0;
+  let totalFixedExpense = 0;
+  let totalVariableExpense = 0;
+  let totalTransactionFee = 0;
+  let totalSubscription = 0;
+  let totalAd = 0;
+  let prevUsers = 0;
+
+  for (let month = 1; month <= periodMonths; month++) {
+    const growthFactor = Math.pow(growthMultiplier, month - 1);
+    const users = Math.max(0, initialUsers * growthFactor);
+    const newUsers = Math.max(0, users - prevUsers);
+
+    let subscriptionIncome = 0;
+    for (const sub of subscriptions) {
+      const prevSubs = prevSubscribersByPlan.get(sub.id) ?? 0;
+      const newSubs = newUsers * (sub.conversionRate / 100);
+      const churned = prevSubs * (sub.churnRate / 100);
+      const currentSubs = Math.max(0, prevSubs - churned + newSubs);
+      prevSubscribersByPlan.set(sub.id, currentSubs);
+      subscriptionIncome += sub.amount * currentSubs;
+    }
+
+    const adIncome = adRevenuePerUser * users;
+    const feeExpense = subscriptionIncome * (totalFeeRate / 100);
+
+    if (month === 1) totalInitialCost += initialCostTotal;
+    totalFixedExpense += fixedExpensePerMonth;
+    totalVariableExpense += variableCostPerUser * users;
+    totalTransactionFee += feeExpense;
+    totalSubscription += subscriptionIncome;
+    totalAd += adIncome;
+
+    prevUsers = users;
+  }
+
+  return {
+    expense: {
+      initialCost: Math.round(totalInitialCost),
+      fixedExpense: Math.round(totalFixedExpense),
+      variableExpense: Math.round(totalVariableExpense),
+      transactionFee: Math.round(totalTransactionFee),
+    },
+    income: {
+      subscription: Math.round(totalSubscription),
+      ad: Math.round(totalAd),
+    },
+  };
 }
 
 // 損益分岐点（BEP）の月を探す。

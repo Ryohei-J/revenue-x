@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import {
   ComposedChart,
-  Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -68,6 +68,24 @@ export function ChartCard({ data }: Props) {
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
           <ComposedChart data={data} margin={{ top: 20, right: 60, left: 20 }}>
+            <defs>
+              <linearGradient id="gradExpense" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(0 84% 60%)" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="hsl(0 84% 60%)" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="gradIncome" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#335BA5" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="#335BA5" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="gradProfit" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(142 71% 45%)" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="hsl(142 71% 45%)" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="gradUsers" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(271 76% 53%)" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="hsl(271 76% 53%)" stopOpacity={0} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
@@ -87,40 +105,43 @@ export function ChartCard({ data }: Props) {
               }
             />
             <Legend />
-            <Line
+            <Area
               type="monotone"
               dataKey="totalExpense"
               name={t("expense")}
               stroke="hsl(0 84% 60%)"
               strokeWidth={2}
+              fill="url(#gradExpense)"
               dot={false}
               yAxisId="left"
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="totalIncome"
               name={t("income")}
-              stroke="hsl(221 83% 53%)"
+              stroke="#335BA5"
               strokeWidth={2}
+              fill="url(#gradIncome)"
               dot={false}
               yAxisId="left"
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="cumulativeProfit"
               name={t("cumulativeProfit")}
               stroke="hsl(142 71% 45%)"
               strokeWidth={2}
+              fill="url(#gradProfit)"
               dot={false}
               yAxisId="left"
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="users"
               name={t("users")}
               stroke="hsl(271 76% 53%)"
               strokeWidth={2}
-              strokeDasharray="5 3"
+              fill="url(#gradUsers)"
               dot={false}
               yAxisId="right"
             />

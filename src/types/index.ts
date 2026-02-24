@@ -57,3 +57,16 @@ export type MonthlyData = {
   profit: number; // 当月損益
   cumulativeProfit: number; // 累計損益
 };
+
+export type BreakdownData = {
+  expense: {
+    initialCost: number;      // 初期費用（期間合計）
+    fixedExpense: number;     // 固定費（期間合計）
+    variableExpense: number;  // 変動費（期間合計）
+    transactionFee: number;   // 決済手数料（期間合計）
+  };
+  income: {
+    subscription: number;     // サブスク収入（期間合計）
+    ad: number;               // 広告収入（期間合計）
+  };
+};

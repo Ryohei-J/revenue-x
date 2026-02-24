@@ -75,6 +75,10 @@
       "label": "累積赤字",
       "description": "最大必要資金"
     },
+    "finalMonthProfit": {
+      "label": "最終月の月次損益",
+      "description": "シミュレーション終了時点の月次収支"
+    },
     "noData": "---"
   },
   "common": {
@@ -123,6 +127,17 @@
     "section6Content": "本規約は日本法に準拠し、解釈されるものとします。",
     "section7Title": "規約の変更",
     "section7Content": "本規約は予告なく変更される場合があります。変更後も本サービスを利用する場合、変更後の規約に同意したものとみなします。"
+  },
+  "breakdown": {
+    "expenseTitle": "支出の内訳",
+    "incomeTitle": "収入の内訳",
+    "initialCost": "初期費用",
+    "fixedExpense": "固定費",
+    "variableExpense": "変動費",
+    "transactionFee": "決済手数料",
+    "subscription": "サブスク",
+    "ad": "広告",
+    "noData": "データなし"
   },
   "legal": {
     "backToHome": "ホームに戻る"

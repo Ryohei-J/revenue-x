@@ -6,6 +6,8 @@ import { IncomeCard } from "@/components/income-card";
 import { PeriodCard } from "@/components/period-card";
 import { ChartCard } from "@/components/chart-card";
 import { StatsCards } from "@/components/stats-cards";
+import { BreakdownCharts } from "@/components/breakdown-charts";
+import { MilestoneCard } from "@/components/milestone-card";
 
 export default function HomePage() {
   const sim = useSimulation();
@@ -58,6 +60,14 @@ export default function HomePage() {
         <div className="space-y-4 lg:col-span-8">
           <StatsCards data={sim.chartData} />
           <ChartCard data={sim.chartData} />
+          <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-2">
+              <BreakdownCharts config={sim.config} />
+            </div>
+            <div className="col-span-2">
+              <MilestoneCard />
+            </div>
+          </div>
         </div>
       </div>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Users2, CalendarDays, TrendingUp } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +37,10 @@ export function PeriodCard({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="initialUsers">{t("initialUsers")}</Label>
+          <Label htmlFor="initialUsers" className="flex items-center gap-1.5">
+            <Users2 className="h-3.5 w-3.5 text-muted-foreground" />
+            {t("initialUsers")}
+          </Label>
           <div className="flex items-center gap-2">
             <Input
               id="initialUsers"
@@ -61,7 +65,10 @@ export function PeriodCard({
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="periodMonths">{t("months")}</Label>
+          <Label htmlFor="periodMonths" className="flex items-center gap-1.5">
+            <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
+            {t("months")}
+          </Label>
           <div className="flex items-center gap-2">
             <Input
               id="periodMonths"
@@ -87,7 +94,10 @@ export function PeriodCard({
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="growthRate">{t("growthRate")}</Label>
+          <Label htmlFor="growthRate" className="flex items-center gap-1.5">
+            <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+            {t("growthRate")}
+          </Label>
           <div className="flex items-center gap-2">
             <Input
               id="growthRate"

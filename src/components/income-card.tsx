@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, CreditCard, Megaphone } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,7 +47,8 @@ export function IncomeCard({
       <CardContent className="space-y-5">
         {/* サブスクセクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <CreditCard className="h-3.5 w-3.5" />
             {t("subscriptionTitle")}
           </h3>
           {subscriptions.map((item) => (
@@ -143,7 +144,8 @@ export function IncomeCard({
 
         {/* 広告セクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <Megaphone className="h-3.5 w-3.5" />
             {t("adTitle")}
           </h3>
           {ads.map((item) => (

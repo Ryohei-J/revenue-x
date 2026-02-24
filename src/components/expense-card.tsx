@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, PackagePlus, Building2, Users, Percent } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,7 +75,8 @@ export function ExpenseCard({
       <CardContent className="space-y-5">
         {/* 初期費用セクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <PackagePlus className="h-3.5 w-3.5" />
             {t("initialCostTitle")}
           </h3>
           {initialCosts.map((item) => (
@@ -126,7 +127,8 @@ export function ExpenseCard({
 
         {/* 固定費セクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <Building2 className="h-3.5 w-3.5" />
             {t("fixedTitle")}
           </h3>
           {fixedExpenses.map((item) => (
@@ -171,7 +173,8 @@ export function ExpenseCard({
 
         {/* 変動費セクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <Users className="h-3.5 w-3.5" />
             {t("variableTitle")}
           </h3>
           {variableExpenses.map((item) => (
@@ -222,7 +225,8 @@ export function ExpenseCard({
 
         {/* 決済手数料セクション */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <Percent className="h-3.5 w-3.5" />
             {t("transactionFeeTitle")}
           </h3>
           {transactionFees.map((item) => (

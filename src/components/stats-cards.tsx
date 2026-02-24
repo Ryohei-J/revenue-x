@@ -20,6 +20,7 @@ export function StatsCards({ data }: Props) {
 
   const bepMonth = useMemo(() => findBreakEvenMonth(data), [data]);
   const maxDeficit = useMemo(() => getMaxCumulativeDeficit(data), [data]);
+  const finalMonthProfit = data.length > 0 ? data[data.length - 1].profit : null;
 
   const noData = data.length === 0;
 
@@ -38,15 +39,22 @@ export function StatsCards({ data }: Props) {
       ? formatCurrency(deficitValue)
       : "¥0";
 
+  // 最終月の月次損益の表示値
+  const finalProfitDisplay = noData
+    ? t("noData")
+    : finalMonthProfit !== null
+      ? (finalMonthProfit >= 0 ? "+" : "-") + formatCurrency(finalMonthProfit)
+      : t("noData");
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {/* 損益分岐点 */}
       <Card>
         <CardHeader>
           <CardDescription>{t("bep.label")}</CardDescription>
           <CardTitle
             className={cn(
-              "text-2xl font-bold tabular-nums",
+              "text-3xl font-bold tabular-nums",
               noData
                 ? "text-muted-foreground"
                 : bepMonth !== null
@@ -68,7 +76,7 @@ export function StatsCards({ data }: Props) {
           <CardDescription>{t("maxDeficit.label")}</CardDescription>
           <CardTitle
             className={cn(
-              "text-2xl font-bold tabular-nums",
+              "text-3xl font-bold tabular-nums",
               noData
                 ? "text-muted-foreground"
                 : deficitValue !== null && deficitValue < 0
@@ -82,6 +90,32 @@ export function StatsCards({ data }: Props) {
         <CardContent>
           <p className="text-xs text-muted-foreground">
             {t("maxDeficit.description")}
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* 最終月の月次損益 */}
+      <Card>
+        <CardHeader>
+          <CardDescription>{t("finalMonthProfit.label")}</CardDescription>
+          <CardTitle
+            className={cn(
+              "text-3xl font-bold tabular-nums",
+              noData || finalMonthProfit === null
+                ? "text-muted-foreground"
+                : finalMonthProfit > 0
+                  ? "text-green-600 dark:text-green-400"
+                  : finalMonthProfit < 0
+                    ? "text-red-600 dark:text-red-400"
+                    : "text-muted-foreground"
+            )}
+          >
+            {finalProfitDisplay}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-xs text-muted-foreground">
+            {t("finalMonthProfit.description")}
           </p>
         </CardContent>
       </Card>
