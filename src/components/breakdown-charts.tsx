@@ -88,7 +88,7 @@ export function BreakdownCharts({ config }: Props) {
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => formatTooltip(value)} />
+                <Tooltip formatter={formatTooltip} />
                 <Legend
                   verticalAlign="bottom"
                   iconSize={10}
@@ -128,7 +128,7 @@ export function BreakdownCharts({ config }: Props) {
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => formatTooltip(value)} />
+                <Tooltip formatter={formatTooltip} />
                 <Legend
                   verticalAlign="bottom"
                   iconSize={10}
