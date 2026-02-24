@@ -57,7 +57,8 @@ export function BreakdownCharts({ config }: Props) {
   const hasExpense = expenseData.length > 0;
   const hasIncome = incomeData.length > 0;
 
-  function formatTooltip(value: number) {
+  function formatTooltip(value: number | undefined) {
+    if (value === undefined) return "";
     return `¥${value.toLocaleString()}`;
   }
 
