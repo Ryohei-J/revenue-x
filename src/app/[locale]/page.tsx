@@ -6,6 +6,7 @@ import { ExpenseCard } from "@/components/expense-card";
 import { IncomeCard } from "@/components/income-card";
 import { PeriodCard } from "@/components/period-card";
 import { ChartCard } from "@/components/chart-card";
+import { StatsCards } from "@/components/stats-cards";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function HomePage() {
@@ -25,14 +26,22 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-4">
           <ExpenseCard
+            initialCosts={sim.config.initialCosts}
             fixedExpenses={sim.config.fixedExpenses}
             variableExpenses={sim.config.variableExpenses}
+            transactionFees={sim.config.transactionFees}
+            onAddInitialCost={sim.addInitialCost}
+            onUpdateInitialCost={sim.updateInitialCost}
+            onRemoveInitialCost={sim.removeInitialCost}
             onAddFixed={sim.addFixedExpense}
             onUpdateFixed={sim.updateFixedExpense}
             onRemoveFixed={sim.removeFixedExpense}
             onAddVariable={sim.addVariableExpense}
             onUpdateVariable={sim.updateVariableExpense}
             onRemoveVariable={sim.removeVariableExpense}
+            onAddTransactionFee={sim.addTransactionFee}
+            onUpdateTransactionFee={sim.updateTransactionFee}
+            onRemoveTransactionFee={sim.removeTransactionFee}
           />
           <IncomeCard
             subscriptions={sim.config.subscriptions}
@@ -53,7 +62,8 @@ export default function HomePage() {
             onInitialUsersChange={sim.setInitialUsers}
           />
         </div>
-        <div className="lg:col-span-8">
+        <div className="space-y-4 lg:col-span-8">
+          <StatsCards data={sim.chartData} />
           <ChartCard data={sim.chartData} />
         </div>
       </div>

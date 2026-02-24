@@ -5,6 +5,11 @@
   },
   "expense": {
     "title": "支出",
+    "initialCostTitle": "初期費用",
+    "initialCostNamePlaceholder": "項目名（例: PC購入代）",
+    "initialCostAmountPlaceholder": "金額（円）",
+    "addInitialCostButton": "初期費用を追加",
+    "oneTime": "1回",
     "fixedTitle": "固定費",
     "variableTitle": "変動費（ユーザーあたり）",
     "namePlaceholder": "項目名（例: サーバー代）",
@@ -14,7 +19,12 @@
     "addFixedButton": "固定費を追加",
     "addVariableButton": "変動費を追加",
     "perMonth": "/月",
-    "perUserMonth": "/ユーザー/月"
+    "perUserMonth": "/ユーザー/月",
+    "transactionFeeTitle": "決済手数料",
+    "transactionFeeNamePlaceholder": "項目名（例: Apple）",
+    "transactionFeeRatePlaceholder": "手数料（%）",
+    "addTransactionFeeButton": "決済手数料を追加",
+    "feePercent": "%"
   },
   "income": {
     "title": "収入",
@@ -46,6 +56,19 @@
     "bep": "損益分岐点",
     "month": "月",
     "amount": "金額（円）"
+  },
+  "stats": {
+    "bep": {
+      "label": "損益分岐点",
+      "description": "累計黒字化",
+      "monthSuffix": "ヶ月目",
+      "notReached": "未達"
+    },
+    "maxDeficit": {
+      "label": "累積赤字",
+      "description": "最大必要資金"
+    },
+    "noData": "---"
   },
   "common": {
     "delete": "削除"

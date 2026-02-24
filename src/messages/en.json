@@ -5,6 +5,11 @@
   },
   "expense": {
     "title": "Expenses",
+    "initialCostTitle": "Initial Costs",
+    "initialCostNamePlaceholder": "Item name (e.g., PC)",
+    "initialCostAmountPlaceholder": "Amount (JPY)",
+    "addInitialCostButton": "Add Initial Cost",
+    "oneTime": "once",
     "fixedTitle": "Fixed Costs",
     "variableTitle": "Variable Costs (per user)",
     "namePlaceholder": "Item name (e.g., Server)",
@@ -14,7 +19,12 @@
     "addFixedButton": "Add Fixed Cost",
     "addVariableButton": "Add Variable Cost",
     "perMonth": "/mo",
-    "perUserMonth": "/user/mo"
+    "perUserMonth": "/user/mo",
+    "transactionFeeTitle": "Transaction Fees",
+    "transactionFeeNamePlaceholder": "Item name (e.g., Apple)",
+    "transactionFeeRatePlaceholder": "Fee (%)",
+    "addTransactionFeeButton": "Add Transaction Fee",
+    "feePercent": "%"
   },
   "income": {
     "title": "Income",
@@ -46,6 +56,19 @@
     "bep": "BEP",
     "month": "Month",
     "amount": "Amount (JPY)"
+  },
+  "stats": {
+    "bep": {
+      "label": "Break-even",
+      "description": "Cumulative profit turns positive",
+      "monthSuffix": "months",
+      "notReached": "N/A"
+    },
+    "maxDeficit": {
+      "label": "Max Deficit",
+      "description": "Max capital needed"
+    },
+    "noData": "---"
   },
   "common": {
     "delete": "Delete"

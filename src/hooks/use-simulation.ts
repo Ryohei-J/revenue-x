@@ -3,8 +3,10 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import type {
   SimulationConfig,
+  InitialCostItem,
   FixedExpenseItem,
   VariableExpenseItem,
+  TransactionFeeItem,
   SubscriptionItem,
   AdItem,
   MonthlyData,
@@ -38,6 +40,44 @@ export function useSimulation() {
     if (!config) return [];
     return calculateSimulation(config);
   }, [config]);
+
+  // --- 初期費用操作 ---
+  const addInitialCost = useCallback(() => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const newItem: InitialCostItem = {
+        id: crypto.randomUUID(),
+        name: "",
+        amount: 0,
+      };
+      return { ...prev, initialCosts: [...prev.initialCosts, newItem] };
+    });
+  }, []);
+
+  const updateInitialCost = useCallback(
+    (id: string, field: "name" | "amount", value: string | number) => {
+      setConfig((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          initialCosts: prev.initialCosts.map((e) =>
+            e.id === id ? { ...e, [field]: value } : e
+          ),
+        };
+      });
+    },
+    []
+  );
+
+  const removeInitialCost = useCallback((id: string) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        initialCosts: prev.initialCosts.filter((e) => e.id !== id),
+      };
+    });
+  }, []);
 
   // --- 固定費操作 ---
   const addFixedExpense = useCallback(() => {
@@ -111,6 +151,44 @@ export function useSimulation() {
       return {
         ...prev,
         variableExpenses: prev.variableExpenses.filter((e) => e.id !== id),
+      };
+    });
+  }, []);
+
+  // --- 決済手数料操作 ---
+  const addTransactionFee = useCallback(() => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const newItem: TransactionFeeItem = {
+        id: crypto.randomUUID(),
+        name: "",
+        rate: 0,
+      };
+      return { ...prev, transactionFees: [...prev.transactionFees, newItem] };
+    });
+  }, []);
+
+  const updateTransactionFee = useCallback(
+    (id: string, field: "name" | "rate", value: string | number) => {
+      setConfig((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          transactionFees: prev.transactionFees.map((f) =>
+            f.id === id ? { ...f, [field]: value } : f
+          ),
+        };
+      });
+    },
+    []
+  );
+
+  const removeTransactionFee = useCallback((id: string) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        transactionFees: prev.transactionFees.filter((f) => f.id !== id),
       };
     });
   }, []);
@@ -212,12 +290,18 @@ export function useSimulation() {
   return {
     config,
     chartData,
+    addInitialCost,
+    updateInitialCost,
+    removeInitialCost,
     addFixedExpense,
     updateFixedExpense,
     removeFixedExpense,
     addVariableExpense,
     updateVariableExpense,
     removeVariableExpense,
+    addTransactionFee,
+    updateTransactionFee,
+    removeTransactionFee,
     addSubscription,
     updateSubscription,
     removeSubscription,

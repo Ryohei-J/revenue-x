@@ -9,8 +9,10 @@ import type { SimulationConfig, MonthlyData } from "@/types";
 // 変動費: ユーザーあたりコスト合計 × ユーザー数
 export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
   const {
+    initialCosts,
     fixedExpenses,
     variableExpenses,
+    transactionFees,
     subscriptions,
     ads,
     periodMonths,
@@ -18,12 +20,20 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
     initialUsers,
   } = config;
 
+  const initialCostTotal = initialCosts.reduce(
+    (sum, e) => sum + e.amount,
+    0
+  );
   const fixedExpensePerMonth = fixedExpenses.reduce(
     (sum, e) => sum + e.amount,
     0
   );
   const variableCostPerUser = variableExpenses.reduce(
     (sum, e) => sum + e.amount,
+    0
+  );
+  const totalFeeRate = transactionFees.reduce(
+    (sum, f) => sum + f.rate,
     0
   );
   const adRevenuePerUser = ads.reduce((sum, a) => sum + a.amount, 0);
@@ -63,8 +73,13 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
     }
 
     const adIncome = adRevenuePerUser * users;
+    const feeExpense = subscriptionIncome * (totalFeeRate / 100);
     const totalIncome = subscriptionIncome + adIncome;
-    const totalExpense = fixedExpensePerMonth + variableCostPerUser * users;
+    const totalExpense =
+      (month === 1 ? initialCostTotal : 0) +
+      fixedExpensePerMonth +
+      variableCostPerUser * users +
+      feeExpense;
     const profit = totalIncome - totalExpense;
     cumulativeProfit += profit;
 
@@ -82,6 +97,13 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
   }
 
   return result;
+}
+
+// 累計損益の最小値（最大赤字額）を返す。
+// データが空なら null。
+export function getMaxCumulativeDeficit(data: MonthlyData[]): number | null {
+  if (data.length === 0) return null;
+  return Math.min(...data.map((d) => d.cumulativeProfit));
 }
 
 // 損益分岐点（BEP）の月を探す。

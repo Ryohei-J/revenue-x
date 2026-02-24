@@ -1,3 +1,9 @@
+export type InitialCostItem = {
+  id: string;
+  name: string;
+  amount: number; // 初期費用（円）、1ヶ月目のみ計上
+};
+
 export type FixedExpenseItem = {
   id: string;
   name: string;
@@ -24,9 +30,17 @@ export type AdItem = {
   amount: number; // 1ユーザーあたり月額（円）
 };
 
+export type TransactionFeeItem = {
+  id: string;
+  name: string;
+  rate: number; // 決済手数料（%）、サブスク売上に対して
+};
+
 export type SimulationConfig = {
+  initialCosts: InitialCostItem[];
   fixedExpenses: FixedExpenseItem[];
   variableExpenses: VariableExpenseItem[];
+  transactionFees: TransactionFeeItem[];
   subscriptions: SubscriptionItem[];
   ads: AdItem[];
   periodMonths: number; // 計算期間（月）

@@ -3,8 +3,10 @@ import type { SimulationConfig } from "@/types";
 const STORAGE_KEY = "revenue-x-simulation";
 
 const DEFAULT_CONFIG: SimulationConfig = {
+  initialCosts: [],
   fixedExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
   variableExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
+  transactionFees: [],
   subscriptions: [
     {
       id: crypto.randomUUID(),
@@ -62,6 +64,14 @@ export function loadConfig(): SimulationConfig {
       }
       delete parsed.conversionRate;
       delete parsed.churnRate;
+    }
+
+    // initialCosts / transactionFees マイグレーション
+    if (!parsed.initialCosts) {
+      parsed.initialCosts = [];
+    }
+    if (!parsed.transactionFees) {
+      parsed.transactionFees = [];
     }
 
     return parsed as SimulationConfig;

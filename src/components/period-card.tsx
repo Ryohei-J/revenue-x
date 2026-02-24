@@ -57,6 +57,8 @@ export function PeriodCard({
             id="growthRate"
             type="number"
             step={0.1}
+            min={-100}
+            max={1000}
             value={monthlyGrowthRate}
             onChange={(e) => onGrowthRateChange(Number(e.target.value) || 0)}
           />

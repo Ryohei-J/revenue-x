@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { calculateSimulation, findBreakEvenMonth } from "@/lib/calc";
+import {
+  calculateSimulation,
+  findBreakEvenMonth,
+  getMaxCumulativeDeficit,
+} from "@/lib/calc";
 import type { SimulationConfig, MonthlyData } from "@/types";
 
 // ヘルパー: デフォルト値をマージ
@@ -7,8 +11,10 @@ function makeConfig(
   overrides: Partial<SimulationConfig> = {}
 ): SimulationConfig {
   return {
+    initialCosts: [],
     fixedExpenses: [],
     variableExpenses: [],
+    transactionFees: [],
     subscriptions: [],
     ads: [],
     periodMonths: 0,
@@ -308,3 +314,115 @@ describe("findBreakEvenMonth", () => {
     expect(bep).toBeLessThanOrEqual(24);
   });
 });
+
+describe("getMaxCumulativeDeficit", () => {
+  it("returns null for empty data", () => {
+    expect(getMaxCumulativeDeficit([])).toBeNull();
+  });
+
+  it("returns the minimum cumulative profit", () => {
+    const data = [
+      makeMonthlyData(1, -2000),
+      makeMonthlyData(2, -5000),
+      makeMonthlyData(3, -3000),
+      makeMonthlyData(4, 1000),
+    ];
+    expect(getMaxCumulativeDeficit(data)).toBe(-5000);
+  });
+
+  it("returns positive value when never in deficit", () => {
+    const data = [
+      makeMonthlyData(1, 1000),
+      makeMonthlyData(2, 3000),
+      makeMonthlyData(3, 6000),
+    ];
+    expect(getMaxCumulativeDeficit(data)).toBe(1000);
+  });
+
+  it("returns single month value", () => {
+    const data = [makeMonthlyData(1, -500)];
+    expect(getMaxCumulativeDeficit(data)).toBe(-500);
+  });
+});
+
+describe("initial costs", () => {
+  it("applies initial costs only in month 1", () => {
+    const config = makeConfig({
+      initialCosts: [{ id: "1", name: "PC", amount: 200000 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 1000 }],
+      periodMonths: 3,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 月1: 初期費用200000 + 固定費1000 = 201000
+    expect(result[0].totalExpense).toBe(201000);
+    // 月2: 固定費1000のみ
+    expect(result[1].totalExpense).toBe(1000);
+    expect(result[2].totalExpense).toBe(1000);
+  });
+
+  it("handles multiple initial cost items", () => {
+    const config = makeConfig({
+      initialCosts: [
+        { id: "1", name: "PC", amount: 200000 },
+        { id: "2", name: "Desk", amount: 50000 },
+      ],
+      periodMonths: 2,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    expect(result[0].totalExpense).toBe(250000);
+    expect(result[1].totalExpense).toBe(0);
+  });
+});
+
+describe("transaction fees", () => {
+  it("deducts transaction fee from subscription income as expense", () => {
+    const config = makeConfig({
+      transactionFees: [{ id: "1", name: "Apple", rate: 30 }],
+      subscriptions: [
+        { id: "1", name: "Pro", amount: 1000, conversionRate: 10, churnRate: 0 },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 契約者 = 100 × 10% = 10, サブスク収入 = 10000
+    // 手数料 = 10000 × 30% = 3000 (支出に加算)
+    expect(result[0].totalIncome).toBe(10000);
+    expect(result[0].totalExpense).toBe(3000);
+    expect(result[0].profit).toBe(7000);
+  });
+
+  it("handles multiple transaction fees", () => {
+    const config = makeConfig({
+      transactionFees: [
+        { id: "1", name: "Apple", rate: 30 },
+        { id: "2", name: "Stripe", rate: 3.6 },
+      ],
+      subscriptions: [
+        { id: "1", name: "Pro", amount: 1000, conversionRate: 10, churnRate: 0 },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 手数料合計 = 33.6%, サブスク収入 = 10000
+    // 手数料 = 10000 × 0.336 = 3360
+    expect(result[0].totalExpense).toBe(3360);
+  });
+
+  it("does not apply fee when there is no subscription income", () => {
+    const config = makeConfig({
+      transactionFees: [{ id: "1", name: "Apple", rate: 30 }],
+      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 広告収入のみ、サブスク収入0なので手数料0
+    expect(result[0].totalExpense).toBe(0);
+    expect(result[0].totalIncome).toBe(5000);
+  });
+});
+
