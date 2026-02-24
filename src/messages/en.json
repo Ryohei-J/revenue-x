@@ -55,7 +55,14 @@
     "users": "Users",
     "bep": "BEP",
     "month": "Month",
-    "amount": "Amount (JPY)"
+    "amount": "Amount (JPY)",
+    "currencyPrefix": "¥",
+    "userSuffix": "",
+    "unitSmall": "K",
+    "unitSmallDivisor": "1000",
+    "unitLarge": "M",
+    "unitLargeDivisor": "1000000",
+    "compactThreshold": "1000000"
   },
   "stats": {
     "bep": {
@@ -72,5 +79,52 @@
   },
   "common": {
     "delete": "Delete"
+  },
+  "footer": {
+    "copyright": "© 2026 RevenueX",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: February 24, 2026",
+    "intro": "RevenueX (\"the Service\") is a revenue simulation tool for indie developers. This policy explains how we handle data in the Service.",
+    "section1Title": "Data We Collect",
+    "section1Content": "The Service does not require account registration and does not collect personal information. All simulation data you enter (expenses, income, period settings, etc.) is stored exclusively in your browser's LocalStorage and is never transmitted to external servers.",
+    "section2Title": "Cookies",
+    "section2Content": "The Service may use cookies or LocalStorage to persist your theme preference (dark/light mode) and language setting. We do not use tracking cookies.",
+    "section3Title": "Analytics",
+    "section3Content": "The Service may use analytics tools to improve the service. These tools may collect anonymized usage statistics but do not collect personally identifiable information.",
+    "section4Title": "Where Data Is Stored",
+    "section4Content": "All simulation data is stored solely in your browser's LocalStorage. Clearing your browser data will also delete any saved simulation configurations.",
+    "section5Title": "Third-Party Sharing",
+    "section5Content": "The Service does not share or sell user data to third parties.",
+    "section6Title": "Contact",
+    "section6Content": "If you have questions about this policy, please reach out via our contact form.",
+    "section7Title": "Changes to This Policy",
+    "section7Content": "This policy may be updated without prior notice. Significant changes will be communicated on this page."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: February 24, 2026",
+    "intro": "These Terms of Service (\"Terms\") govern your use of RevenueX (\"the Service\"). By using the Service, you agree to these Terms.",
+    "section1Title": "Service Overview",
+    "section1Content": "The Service is a revenue simulation tool for indie developers. It visualizes revenue projections based on parameters you provide.",
+    "section2Title": "Disclaimer on Simulation Results",
+    "section2Content": "Simulation results provided by the Service are approximate estimates based on your input parameters and do not guarantee actual revenue. Always consult a professional for business planning or investment decisions. The operator assumes no liability for any damages arising from the use of this Service.",
+    "section3Title": "Pricing",
+    "section3Content": "The Service is provided free of charge. Paid features may be introduced in the future, with prior notice.",
+    "section4Title": "Prohibited Activities",
+    "section4Content": "The following activities are prohibited: decompiling or reverse-engineering the Service, placing excessive load on the servers, and any other actions deemed inappropriate by the operator.",
+    "section5Title": "Service Modifications and Suspension",
+    "section5Content": "The operator may modify or suspend the Service without prior notice.",
+    "section6Title": "Governing Law",
+    "section6Content": "These Terms shall be governed by and construed in accordance with the laws of Japan.",
+    "section7Title": "Changes to These Terms",
+    "section7Content": "These Terms may be updated without prior notice. Continued use of the Service after changes constitutes acceptance of the revised Terms."
+  },
+  "legal": {
+    "backToHome": "Back to Home"
   }
 }

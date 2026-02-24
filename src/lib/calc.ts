@@ -110,6 +110,11 @@ export function getMaxCumulativeDeficit(data: MonthlyData[]): number | null {
 // cumulativeProfit が負→正に初めて転じる月を線形補間で返す。
 // BEPが存在しない場合は null を返す。
 export function findBreakEvenMonth(data: MonthlyData[]): number | null {
+  if (data.length === 0) return null;
+
+  // 1ヶ月目から黒字の場合
+  if (data[0].cumulativeProfit > 0) return 1;
+
   for (let i = 1; i < data.length; i++) {
     const prev = data[i - 1];
     const curr = data[i];

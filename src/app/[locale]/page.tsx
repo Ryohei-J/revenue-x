@@ -1,16 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { useSimulation } from "@/hooks/use-simulation";
 import { ExpenseCard } from "@/components/expense-card";
 import { IncomeCard } from "@/components/income-card";
 import { PeriodCard } from "@/components/period-card";
 import { ChartCard } from "@/components/chart-card";
 import { StatsCards } from "@/components/stats-cards";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function HomePage() {
-  const t = useTranslations("app");
   const sim = useSimulation();
 
   if (!sim.config) {
@@ -19,10 +16,6 @@ export default function HomePage() {
 
   return (
     <main className="container mx-auto p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <ThemeToggle />
-      </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-4">
           <ExpenseCard

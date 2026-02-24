@@ -258,12 +258,12 @@ describe("findBreakEvenMonth", () => {
     expect(findBreakEvenMonth(data)).toBeNull();
   });
 
-  it("returns null when cumulative profit starts positive", () => {
+  it("returns 1 when cumulative profit starts positive", () => {
     const data = [
       makeMonthlyData(1, 4000),
       makeMonthlyData(2, 8500),
     ];
-    expect(findBreakEvenMonth(data)).toBeNull();
+    expect(findBreakEvenMonth(data)).toBe(1);
   });
 
   it("returns exact month when cumulative profit is 0 then positive", () => {

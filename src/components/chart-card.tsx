@@ -24,6 +24,41 @@ type Props = {
 export function ChartCard({ data }: Props) {
   const t = useTranslations("chart");
   const bepMonth = useMemo(() => findBreakEvenMonth(data), [data]);
+  const currencyPrefix = t("currencyPrefix");
+  const userSuffix = t("userSuffix");
+  const unitSmall = t("unitSmall");
+  const unitSmallDiv = Number(t("unitSmallDivisor"));
+  const unitLarge = t("unitLarge");
+  const unitLargeDiv = Number(t("unitLargeDivisor"));
+  const compactThreshold = Number(t("compactThreshold"));
+
+  function formatCompact(v: number) {
+    const abs = Math.abs(v);
+    if (abs >= unitLargeDiv) {
+      const n = abs / unitLargeDiv;
+      return { n: Number.isInteger(n) ? String(n) : n.toFixed(1), unit: unitLarge };
+    }
+    if (abs >= unitSmallDiv) {
+      const n = abs / unitSmallDiv;
+      return { n: Number.isInteger(n) ? String(n) : n.toFixed(1), unit: unitSmall };
+    }
+    return { n: abs.toLocaleString(), unit: "" };
+  }
+
+  function formatCurrency(v: number) {
+    const sign = v < 0 ? "-" : "";
+    const abs = Math.abs(v);
+    if (abs >= compactThreshold) {
+      const { n, unit } = formatCompact(v);
+      return `${sign}${currencyPrefix}${n}${unit}`;
+    }
+    return `${sign}${currencyPrefix}${abs.toLocaleString()}`;
+  }
+
+  function formatUsers(v: number) {
+    const { n, unit } = formatCompact(v);
+    return `${n}${unit}${userSuffix}`;
+  }
 
   return (
     <Card>
@@ -32,28 +67,19 @@ export function ChartCard({ data }: Props) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart data={data}>
+          <ComposedChart data={data} margin={{ top: 20, right: 60, left: 20 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
-              label={{ value: t("month"), position: "insideBottom", offset: -5 }}
+              type="number"
+              domain={["dataMin", "dataMax"]}
+              ticks={data.map((d) => d.month)}
             />
-            <YAxis
-              yAxisId="left"
-              label={{
-                value: t("amount"),
-                angle: -90,
-                position: "insideLeft",
-              }}
-            />
+            <YAxis yAxisId="left" tickFormatter={formatCurrency} />
             <YAxis
               yAxisId="right"
               orientation="right"
-              label={{
-                value: t("users"),
-                angle: 90,
-                position: "insideRight",
-              }}
+              tickFormatter={formatUsers}
             />
             <Tooltip
               formatter={(value) =>
@@ -97,6 +123,12 @@ export function ChartCard({ data }: Props) {
               strokeDasharray="5 3"
               dot={false}
               yAxisId="right"
+            />
+            <ReferenceLine
+              y={0}
+              yAxisId="left"
+              stroke="var(--muted-foreground)"
+              strokeDasharray="4 4"
             />
             {bepMonth !== null && (
               <ReferenceLine

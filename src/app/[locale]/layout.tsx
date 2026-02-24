@@ -4,6 +4,8 @@ import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
 import "@/app/globals.css";
 
 const geistSans = Geist({
@@ -32,11 +34,13 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-svh flex-col`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextIntlClientProvider messages={messages}>
-            {children}
+            <SiteHeader />
+            <div className="flex-1">{children}</div>
+            <Footer />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
