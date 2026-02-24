@@ -9,6 +9,7 @@ import type {
   TransactionFeeItem,
   SubscriptionItem,
   AdItem,
+  OneTimePurchaseItem,
   MonthlyData,
 } from "@/types";
 import { calculateSimulation } from "@/lib/calc";
@@ -272,6 +273,49 @@ export function useSimulation() {
     });
   }, []);
 
+  // --- 買い切り操作 ---
+  const addOneTimePurchase = useCallback(() => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const newItem: OneTimePurchaseItem = {
+        id: crypto.randomUUID(),
+        name: "",
+        amount: 0,
+        conversionRate: 10,
+      };
+      return { ...prev, oneTimePurchases: [...prev.oneTimePurchases, newItem] };
+    });
+  }, []);
+
+  const updateOneTimePurchase = useCallback(
+    (
+      id: string,
+      field: "name" | "amount" | "conversionRate",
+      value: string | number
+    ) => {
+      setConfig((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          oneTimePurchases: prev.oneTimePurchases.map((o) =>
+            o.id === id ? { ...o, [field]: value } : o
+          ),
+        };
+      });
+    },
+    []
+  );
+
+  const removeOneTimePurchase = useCallback((id: string) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        oneTimePurchases: prev.oneTimePurchases.filter((o) => o.id !== id),
+      };
+    });
+  }, []);
+
   // --- 期間設定 ---
   const setPeriodMonths = useCallback((months: number) => {
     setConfig((prev) => (prev ? { ...prev, periodMonths: months } : prev));
@@ -308,6 +352,9 @@ export function useSimulation() {
     addAd,
     updateAd,
     removeAd,
+    addOneTimePurchase,
+    updateOneTimePurchase,
+    removeOneTimePurchase,
     setPeriodMonths,
     setMonthlyGrowthRate,
     setInitialUsers,

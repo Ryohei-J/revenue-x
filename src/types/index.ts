@@ -30,6 +30,13 @@ export type AdItem = {
   amount: number; // 1ユーザーあたり月額（円）
 };
 
+export type OneTimePurchaseItem = {
+  id: string;
+  name: string;
+  amount: number;         // 販売価格（円）
+  conversionRate: number; // 購入率（%）- 新規ユーザーのうち購入する割合
+};
+
 export type TransactionFeeItem = {
   id: string;
   name: string;
@@ -43,6 +50,7 @@ export type SimulationConfig = {
   transactionFees: TransactionFeeItem[];
   subscriptions: SubscriptionItem[];
   ads: AdItem[];
+  oneTimePurchases: OneTimePurchaseItem[];
   periodMonths: number; // 計算期間（月）
   monthlyGrowthRate: number; // 月次成長率（%）
   initialUsers: number; // 初期ユーザー数
@@ -67,6 +75,7 @@ export type BreakdownData = {
   };
   income: {
     subscription: number;     // サブスク収入（期間合計）
+    oneTimePurchase: number;  // 買い切り収入（期間合計）
     ad: number;               // 広告収入（期間合計）
   };
 };

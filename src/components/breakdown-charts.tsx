@@ -27,6 +27,7 @@ const EXPENSE_COLORS = [
 
 const INCOME_COLORS = [
   "#335BA5",            // サブスク: brand blue
+  "hsl(45 93% 47%)",   // 買い切り: amber
   "hsl(142 71% 45%)",  // 広告: green
 ];
 
@@ -50,6 +51,7 @@ export function BreakdownCharts({ config }: Props) {
   const incomeData = breakdown
     ? [
         { name: t("subscription"), value: breakdown.income.subscription },
+        { name: t("oneTimePurchase"), value: breakdown.income.oneTimePurchase },
         { name: t("ad"), value: breakdown.income.ad },
       ].filter((d) => d.value > 0)
     : [];

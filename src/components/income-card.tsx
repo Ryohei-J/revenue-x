@@ -1,16 +1,17 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Plus, Trash2, CreditCard, Megaphone } from "lucide-react";
+import { Plus, Trash2, CreditCard, Megaphone, ShoppingCart } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { SubscriptionItem, AdItem } from "@/types";
+import type { SubscriptionItem, AdItem, OneTimePurchaseItem } from "@/types";
 
 type Props = {
   subscriptions: SubscriptionItem[];
   ads: AdItem[];
+  oneTimePurchases: OneTimePurchaseItem[];
   onAddSubscription: () => void;
   onUpdateSubscription: (
     id: string,
@@ -25,17 +26,28 @@ type Props = {
     value: string | number
   ) => void;
   onRemoveAd: (id: string) => void;
+  onAddOneTimePurchase: () => void;
+  onUpdateOneTimePurchase: (
+    id: string,
+    field: "name" | "amount" | "conversionRate",
+    value: string | number
+  ) => void;
+  onRemoveOneTimePurchase: (id: string) => void;
 };
 
 export function IncomeCard({
   subscriptions,
   ads,
+  oneTimePurchases,
   onAddSubscription,
   onUpdateSubscription,
   onRemoveSubscription,
   onAddAd,
   onUpdateAd,
   onRemoveAd,
+  onAddOneTimePurchase,
+  onUpdateOneTimePurchase,
+  onRemoveOneTimePurchase,
 }: Props) {
   const t = useTranslations("income");
 
@@ -139,6 +151,77 @@ export function IncomeCard({
           >
             <Plus className="mr-1 h-4 w-4" />
             {t("addSubscriptionButton")}
+          </Button>
+        </div>
+
+        {/* 買い切りセクション */}
+        <div className="space-y-3">
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <ShoppingCart className="h-3.5 w-3.5" />
+            {t("oneTimePurchaseTitle")}
+          </h3>
+          {oneTimePurchases.map((item) => (
+            <div key={item.id} className="space-y-2 rounded-md border p-3">
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder={t("oneTimePurchaseNamePlaceholder")}
+                  value={item.name}
+                  onChange={(e) =>
+                    onUpdateOneTimePurchase(item.id, "name", e.target.value)
+                  }
+                  className="flex-1"
+                />
+                <Input
+                  type="number"
+                  placeholder={t("oneTimePurchaseAmountPlaceholder")}
+                  value={item.amount || ""}
+                  onChange={(e) =>
+                    onUpdateOneTimePurchase(
+                      item.id,
+                      "amount",
+                      Number(e.target.value) || 0
+                    )
+                  }
+                  className="w-32"
+                />
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                  {t("perSale")}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onRemoveOneTimePurchase(item.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">{t("purchaseConversionRate")}</Label>
+                <Input
+                  type="number"
+                  step={0.1}
+                  min={0}
+                  max={100}
+                  value={item.conversionRate}
+                  onChange={(e) =>
+                    onUpdateOneTimePurchase(
+                      item.id,
+                      "conversionRate",
+                      Number(e.target.value) || 0
+                    )
+                  }
+                />
+              </div>
+            </div>
+          ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onAddOneTimePurchase}
+            className="w-full"
+          >
+            <Plus className="mr-1 h-4 w-4" />
+            {t("addOneTimePurchaseButton")}
           </Button>
         </div>
 

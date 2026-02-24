@@ -17,6 +17,7 @@ const DEFAULT_CONFIG: SimulationConfig = {
     },
   ],
   ads: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
+  oneTimePurchases: [],
   periodMonths: 12,
   monthlyGrowthRate: 5,
   initialUsers: 100,
@@ -72,6 +73,9 @@ export function loadConfig(): SimulationConfig {
     }
     if (!parsed.transactionFees) {
       parsed.transactionFees = [];
+    }
+    if (!parsed.oneTimePurchases) {
+      parsed.oneTimePurchases = [];
     }
 
     return parsed as SimulationConfig;

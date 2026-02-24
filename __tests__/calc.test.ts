@@ -17,6 +17,7 @@ function makeConfig(
     transactionFees: [],
     subscriptions: [],
     ads: [],
+    oneTimePurchases: [],
     periodMonths: 0,
     monthlyGrowthRate: 0,
     initialUsers: 0,

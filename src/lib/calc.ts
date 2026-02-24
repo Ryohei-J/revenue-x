@@ -15,6 +15,7 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
     transactionFees,
     subscriptions,
     ads,
+    oneTimePurchases,
     periodMonths,
     monthlyGrowthRate,
     initialUsers,
@@ -72,9 +73,15 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
       subscriptionIncome += sub.amount * currentSubs;
     }
 
+    // 買い切り収入: 当月新規ユーザーのうち購入率分が購入
+    let oneTimePurchaseIncome = 0;
+    for (const otp of oneTimePurchases) {
+      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * otp.amount;
+    }
+
     const adIncome = adRevenuePerUser * users;
-    const feeExpense = subscriptionIncome * (totalFeeRate / 100);
-    const totalIncome = subscriptionIncome + adIncome;
+    const feeExpense = (subscriptionIncome + oneTimePurchaseIncome) * (totalFeeRate / 100);
+    const totalIncome = subscriptionIncome + oneTimePurchaseIncome + adIncome;
     const totalExpense =
       (month === 1 ? initialCostTotal : 0) +
       fixedExpensePerMonth +
@@ -116,6 +123,7 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
     transactionFees,
     subscriptions,
     ads,
+    oneTimePurchases,
     periodMonths,
     monthlyGrowthRate,
     initialUsers,
@@ -138,6 +146,7 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
   let totalVariableExpense = 0;
   let totalTransactionFee = 0;
   let totalSubscription = 0;
+  let totalOneTimePurchase = 0;
   let totalAd = 0;
   let prevUsers = 0;
 
@@ -156,14 +165,20 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
       subscriptionIncome += sub.amount * currentSubs;
     }
 
+    let oneTimePurchaseIncome = 0;
+    for (const otp of oneTimePurchases) {
+      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * otp.amount;
+    }
+
     const adIncome = adRevenuePerUser * users;
-    const feeExpense = subscriptionIncome * (totalFeeRate / 100);
+    const feeExpense = (subscriptionIncome + oneTimePurchaseIncome) * (totalFeeRate / 100);
 
     if (month === 1) totalInitialCost += initialCostTotal;
     totalFixedExpense += fixedExpensePerMonth;
     totalVariableExpense += variableCostPerUser * users;
     totalTransactionFee += feeExpense;
     totalSubscription += subscriptionIncome;
+    totalOneTimePurchase += oneTimePurchaseIncome;
     totalAd += adIncome;
 
     prevUsers = users;
@@ -178,6 +193,7 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
     },
     income: {
       subscription: Math.round(totalSubscription),
+      oneTimePurchase: Math.round(totalOneTimePurchase),
       ad: Math.round(totalAd),
     },
   };

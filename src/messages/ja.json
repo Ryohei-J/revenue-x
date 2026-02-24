@@ -39,7 +39,13 @@
     "adNamePlaceholder": "項目名（例: バナー広告）",
     "adAmountPlaceholder": "単価（円）",
     "addAdButton": "広告を追加",
-    "perUserMonth": "/ユーザー/月"
+    "perUserMonth": "/ユーザー/月",
+    "oneTimePurchaseTitle": "買い切り",
+    "oneTimePurchaseNamePlaceholder": "アプリ名（例: ProApp）",
+    "oneTimePurchaseAmountPlaceholder": "販売価格（円）",
+    "perSale": "/件",
+    "purchaseConversionRate": "購入率（%）",
+    "addOneTimePurchaseButton": "買い切りを追加"
   },
   "period": {
     "title": "ユーザー・期間設定",
@@ -136,6 +142,7 @@
     "variableExpense": "変動費",
     "transactionFee": "決済手数料",
     "subscription": "サブスク",
+    "oneTimePurchase": "買い切り",
     "ad": "広告",
     "noData": "データなし"
   },

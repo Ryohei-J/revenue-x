@@ -41,12 +41,16 @@ export default function HomePage() {
           <IncomeCard
             subscriptions={sim.config.subscriptions}
             ads={sim.config.ads}
+            oneTimePurchases={sim.config.oneTimePurchases}
             onAddSubscription={sim.addSubscription}
             onUpdateSubscription={sim.updateSubscription}
             onRemoveSubscription={sim.removeSubscription}
             onAddAd={sim.addAd}
             onUpdateAd={sim.updateAd}
             onRemoveAd={sim.removeAd}
+            onAddOneTimePurchase={sim.addOneTimePurchase}
+            onUpdateOneTimePurchase={sim.updateOneTimePurchase}
+            onRemoveOneTimePurchase={sim.removeOneTimePurchase}
           />
           <PeriodCard
             periodMonths={sim.config.periodMonths}
