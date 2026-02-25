@@ -92,19 +92,21 @@ export function ChartCard({ data }: Props) {
               type="number"
               domain={["dataMin", "dataMax"]}
               ticks={data.map((d) => d.month)}
+              tick={{ fontSize: 13 }}
             />
-            <YAxis yAxisId="left" tickFormatter={formatCurrency} />
+            <YAxis yAxisId="left" tickFormatter={formatCurrency} tick={{ fontSize: 13 }} />
             <YAxis
               yAxisId="right"
               orientation="right"
               tickFormatter={formatUsers}
+              tick={{ fontSize: 13 }}
             />
             <Tooltip
               formatter={(value) =>
                 typeof value === "number" ? value.toLocaleString() : value
               }
             />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: "13px" }} />
             <Area
               type="monotone"
               dataKey="totalExpense"
@@ -162,7 +164,7 @@ export function ChartCard({ data }: Props) {
                   value: t("bep"),
                   position: "top",
                   fill: "hsl(45 93% 47%)",
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 600,
                 }}
               />

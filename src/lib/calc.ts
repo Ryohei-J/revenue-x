@@ -221,6 +221,47 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
   };
 }
 
+// プランごとの期間末契約者数を返す。
+export function getFinalSubscribersByPlan(config: SimulationConfig): { name: string; count: number }[] {
+  const { subscriptions, periodMonths, monthlyGrowthRate, initialUsers } = config;
+  if (subscriptions.length === 0) return [];
+
+  const prevSubscribersByPlan = new Map<string, number>();
+  for (const sub of subscriptions) {
+    prevSubscribersByPlan.set(sub.id, 0);
+  }
+
+  const growthMultiplier = 1 + monthlyGrowthRate / 100;
+  let prevUsers = 0;
+
+  for (let month = 1; month <= periodMonths; month++) {
+    const users = Math.max(0, initialUsers * Math.pow(growthMultiplier, month - 1));
+    const newUsers = Math.max(0, users - prevUsers);
+    for (const sub of subscriptions) {
+      const prevSubs = prevSubscribersByPlan.get(sub.id) ?? 0;
+      const currentSubs = Math.max(
+        0,
+        prevSubs - prevSubs * (sub.churnRate / 100) + newUsers * (sub.conversionRate / 100)
+      );
+      prevSubscribersByPlan.set(sub.id, currentSubs);
+    }
+    prevUsers = users;
+  }
+
+  return subscriptions.map((sub) => ({
+    name: sub.name || "（名称未設定）",
+    count: Math.round(prevSubscribersByPlan.get(sub.id) ?? 0),
+  }));
+}
+
+// 指定した月収閾値に最初に達する月を返す。期間内に達しない場合は null。
+export function findIncomeMonth(data: MonthlyData[], threshold: number): number | null {
+  for (const d of data) {
+    if (d.totalIncome >= threshold) return d.month;
+  }
+  return null;
+}
+
 // 損益分岐点（BEP）の月を探す。
 // cumulativeProfit が負→正に初めて転じる月を線形補間で返す。
 // BEPが存在しない場合は null を返す。

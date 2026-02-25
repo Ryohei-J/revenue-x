@@ -96,7 +96,8 @@
     "copyright": "© 2026 RevenueX",
     "privacy": "プライバシーポリシー",
     "terms": "利用規約",
-    "contact": "お問い合わせ"
+    "contact": "お問い合わせ",
+    "contactUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdbW4jpmjt1upXvw1IkBuXLZH4DR9MijS4sUck69ZAnqb8ABg/viewform?usp=publish-editor"
   },
   "privacy": {
     "title": "プライバシーポリシー",
@@ -156,5 +157,20 @@
   },
   "legal": {
     "backToHome": "ホームに戻る"
+  },
+  "help": {
+    "title": "ヘルプ",
+    "subtitle": "基本的な使い方ガイド",
+    "intro": "RevenueXは個人開発者向けの収益シミュレーターです。支出・収入・成長率を入力するだけで、月次の収支推移をリアルタイムで可視化できます。",
+    "section1Title": "基本的な使い方",
+    "section1Content": "左カラムに支出・収入・期間の各項目を入力すると、右カラムのグラフとKPI指標がリアルタイムで更新されます。入力したデータはブラウザに自動保存されます。",
+    "section2Title": "支出の設定",
+    "section2Content": "初期費用（機材・開発費など1回限りのコスト）、固定費（毎月かかるサーバー代など）、変動費（ユーザー数に応じたAPIコストなど）、決済手数料（ストアやStripeの手数料率）を個別に設定できます。",
+    "section3Title": "収入の設定",
+    "section3Content": "サブスクリプション（課金率・解約率を考慮した契約者数シミュレーション）、広告収入（ユーザーあたりの月額収益）、買い切り販売（新規ユーザーへの購入率）を組み合わせて設定できます。",
+    "section4Title": "グラフの見方",
+    "section4Content": "メインのグラフでは収入・支出・累計損益・ユーザー数の推移を確認できます。黄色い破線は損益分岐点（BEP）を示しており、累積赤字が解消される月が一目でわかります。",
+    "section5Title": "KPI指標の見方",
+    "section5Content": "損益分岐点（累計黒字化する月）・累積赤字（最大必要資金）・最終月の月次損益の3つの指標を表示しています。事業計画の概算把握にお役立てください。"
   }
 }

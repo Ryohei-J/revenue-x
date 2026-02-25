@@ -1,6 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+
+const TRANSACTION_FEE_PRESETS = [
+  { name: "Stripe",               rate: 3.6 },
+  { name: "App Store",            rate: 30  },
+  { name: "App Store (小規模)",   rate: 15  },
+  { name: "Google Play",          rate: 30  },
+  { name: "Google Play (小規模)", rate: 15  },
+] as const;
 import { Plus, Trash2, PackagePlus, Building2, Users, Percent } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,7 +48,7 @@ type Props = {
     value: string | number
   ) => void;
   onRemoveVariable: (id: string) => void;
-  onAddTransactionFee: () => void;
+  onAddTransactionFee: (preset?: { name: string; rate: number }) => void;
   onUpdateTransactionFee: (
     id: string,
     field: "name" | "rate",
@@ -283,10 +291,23 @@ export function ExpenseCard({
               </Button>
             </div>
           ))}
+          <div className="flex flex-wrap gap-1.5">
+            {TRANSACTION_FEE_PRESETS.map((preset) => (
+              <Button
+                key={preset.name}
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => onAddTransactionFee(preset)}
+              >
+                {preset.name} {preset.rate}%
+              </Button>
+            ))}
+          </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={onAddTransactionFee}
+            onClick={() => onAddTransactionFee()}
             className="w-full"
           >
             <Plus className="mr-1 h-4 w-4" />

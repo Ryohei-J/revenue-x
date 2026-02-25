@@ -3,22 +3,27 @@
 import { CheckCircle2, Circle, Target } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { findIncomeMonth } from "@/lib/calc";
+import type { MonthlyData } from "@/types";
 
-type Milestone = {
-  label: string;
-  achievedMonth: number | null;
-};
-
-// TODO: compute dynamically from simulation data
-const MILESTONES: Milestone[] = [
-  { label: "サーバー代を自給自足", achievedMonth: 3 },
-  { label: "月5万円（副業お小遣いレベル）", achievedMonth: 8 },
-  { label: "月30万円（独立検討レベル）", achievedMonth: null },
+const INCOME_MILESTONES = [
+  { label: "月収¥50,000（副業レベル）", threshold: 50_000 },
+  { label: "月収¥300,000（独立検討レベル）", threshold: 300_000 },
+  { label: "月収¥1,000,000（法人化検討レベル）", threshold: 1_000_000 },
 ];
 
-export function MilestoneCard() {
+type Props = {
+  data: MonthlyData[];
+};
+
+export function MilestoneCard({ data }: Props) {
+  const milestones = INCOME_MILESTONES.map((m) => ({
+    label: m.label,
+    achievedMonth: findIncomeMonth(data, m.threshold),
+  }));
+
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-1.5">
           <Target className="h-4 w-4" />
@@ -27,7 +32,7 @@ export function MilestoneCard() {
       </CardHeader>
       <CardContent>
         <ul className="space-y-3">
-          {MILESTONES.map((m, i) => (
+          {milestones.map((m, i) => (
             <li key={i} className="flex items-center gap-3">
               {m.achievedMonth !== null ? (
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500 dark:text-green-400" />

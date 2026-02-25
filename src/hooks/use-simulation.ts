@@ -189,13 +189,13 @@ export function useSimulation() {
   }, []);
 
   // --- 決済手数料操作 ---
-  const addTransactionFee = useCallback(() => {
+  const addTransactionFee = useCallback((preset?: { name: string; rate: number }) => {
     setConfig((prev) => {
       if (!prev) return prev;
       const newItem: TransactionFeeItem = {
         id: crypto.randomUUID(),
-        name: "",
-        rate: 0,
+        name: preset?.name ?? "",
+        rate: preset?.rate ?? 0,
       };
       return { ...prev, transactionFees: [...prev.transactionFees, newItem] };
     });

@@ -9,6 +9,7 @@ import { ChartCard } from "@/components/chart-card";
 import { StatsCards } from "@/components/stats-cards";
 import { BreakdownCharts } from "@/components/breakdown-charts";
 import { MilestoneCard } from "@/components/milestone-card";
+import { UsersCard } from "@/components/users-card";
 
 export default function HomePage() {
   const sim = useSimulation();
@@ -18,7 +19,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="container mx-auto p-4">
+    <main className="container mx-auto px-8 py-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-4">
           <SettingsCard
@@ -75,9 +76,10 @@ export default function HomePage() {
               <BreakdownCharts config={sim.config} />
             </div>
             <div className="col-span-2">
-              <MilestoneCard />
+              <UsersCard data={sim.chartData} config={sim.config} />
             </div>
           </div>
+          <MilestoneCard data={sim.chartData} />
         </div>
       </div>
     </main>

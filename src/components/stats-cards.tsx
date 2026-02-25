@@ -54,7 +54,7 @@ export function StatsCards({ data }: Props) {
           <CardDescription>{t("bep.label")}</CardDescription>
           <CardTitle
             className={cn(
-              "text-3xl font-bold tabular-nums",
+              "text-4xl font-bold tabular-nums",
               noData
                 ? "text-muted-foreground"
                 : bepMonth !== null
@@ -66,7 +66,7 @@ export function StatsCards({ data }: Props) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground">{t("bep.description")}</p>
+          <p className="text-sm text-muted-foreground">{t("bep.description")}</p>
         </CardContent>
       </Card>
 
@@ -76,7 +76,7 @@ export function StatsCards({ data }: Props) {
           <CardDescription>{t("maxDeficit.label")}</CardDescription>
           <CardTitle
             className={cn(
-              "text-3xl font-bold tabular-nums",
+              "text-4xl font-bold tabular-nums",
               noData
                 ? "text-muted-foreground"
                 : deficitValue !== null && deficitValue < 0
@@ -88,7 +88,7 @@ export function StatsCards({ data }: Props) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {t("maxDeficit.description")}
           </p>
         </CardContent>
@@ -100,7 +100,7 @@ export function StatsCards({ data }: Props) {
           <CardDescription>{t("finalMonthProfit.label")}</CardDescription>
           <CardTitle
             className={cn(
-              "text-3xl font-bold tabular-nums",
+              "text-4xl font-bold tabular-nums",
               noData || finalMonthProfit === null
                 ? "text-muted-foreground"
                 : finalMonthProfit > 0
@@ -114,7 +114,7 @@ export function StatsCards({ data }: Props) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {t("finalMonthProfit.description")}
           </p>
         </CardContent>

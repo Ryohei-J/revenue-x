@@ -96,7 +96,8 @@
     "copyright": "© 2026 RevenueX",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "contact": "Contact"
+    "contact": "Contact",
+    "contactUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeC9JfNlMwLxS9ucJ2FwTSgexd5VXwcsW4ct-GiIGOqDpXNIw/viewform?usp=publish-editor"
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -156,5 +157,20 @@
   },
   "legal": {
     "backToHome": "Back to Home"
+  },
+  "help": {
+    "title": "Help",
+    "subtitle": "Getting Started Guide",
+    "intro": "RevenueX is a revenue simulator for indie developers. Enter your expenses, income, and growth rate to visualize monthly cash flow in real time.",
+    "section1Title": "Basic Usage",
+    "section1Content": "Enter your expenses, income, and period settings in the left column. The chart and KPI metrics on the right update in real time. Your data is automatically saved to your browser.",
+    "section2Title": "Setting Up Expenses",
+    "section2Content": "Configure initial costs (one-time expenses like equipment), fixed costs (recurring monthly costs like server fees), variable costs (per-user costs like API usage), and transaction fees (store or payment processor rates).",
+    "section3Title": "Setting Up Income",
+    "section3Content": "Combine subscriptions (with conversion and churn rates), advertising revenue (monthly income per user), and one-time purchases (purchase rate among new users).",
+    "section4Title": "Reading the Chart",
+    "section4Content": "The main chart shows trends for income, expenses, cumulative profit, and user count. The yellow dashed line marks the break-even point (BEP) — the month when cumulative losses are eliminated.",
+    "section5Title": "Reading KPI Metrics",
+    "section5Content": "Three key metrics are displayed: break-even month (when cumulative profit turns positive), max deficit (maximum capital required), and final month profit. Use these as rough estimates for your business planning."
   }
 }

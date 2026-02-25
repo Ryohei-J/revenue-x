@@ -9,7 +9,7 @@ export function Footer() {
 
   return (
     <footer className="border-t mt-8">
-      <div className="container mx-auto flex flex-col items-center gap-4 px-4 py-6 sm:flex-row sm:justify-between">
+      <div className="container mx-auto flex flex-col items-center gap-4 px-8 py-6 sm:flex-row sm:justify-between">
         <p className="text-sm text-muted-foreground">{t("copyright")}</p>
         <nav className="flex items-center gap-4 text-sm text-muted-foreground">
           <Link
@@ -25,7 +25,7 @@ export function Footer() {
             {t("terms")}
           </Link>
           <a
-            href="#"
+            href={t("contactUrl")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
