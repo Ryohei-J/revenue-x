@@ -50,7 +50,7 @@ export function UsersCard({ data, config }: Props) {
             planSubscribers.map((plan, i) => (
               <li key={i} className="flex items-center gap-3">
                 <UserCheck className="h-5 w-5 shrink-0 text-muted-foreground" />
-                <span className="flex-1 text-sm">{plan.name}</span>
+                <span className="flex-1 text-sm">{plan.name || t("unnamed")}</span>
                 <span className="text-sm font-semibold tabular-nums">
                   {plan.count.toLocaleString()}
                   {t("suffix") && (

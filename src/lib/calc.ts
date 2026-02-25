@@ -249,7 +249,7 @@ export function getFinalSubscribersByPlan(config: SimulationConfig): { name: str
   }
 
   return subscriptions.map((sub) => ({
-    name: sub.name || "（名称未設定）",
+    name: sub.name,
     count: Math.round(prevSubscribersByPlan.get(sub.id) ?? 0),
   }));
 }

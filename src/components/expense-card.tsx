@@ -3,11 +3,11 @@
 import { useTranslations } from "next-intl";
 
 const TRANSACTION_FEE_PRESETS = [
-  { name: "Stripe",               rate: 3.6 },
-  { name: "App Store",            rate: 30  },
-  { name: "App Store (小規模)",   rate: 15  },
-  { name: "Google Play",          rate: 30  },
-  { name: "Google Play (小規模)", rate: 15  },
+  { labelKey: "presetStripe",          rate: 3.6 },
+  { labelKey: "presetAppStore",        rate: 30  },
+  { labelKey: "presetAppStoreSmall",   rate: 15  },
+  { labelKey: "presetGooglePlay",      rate: 30  },
+  { labelKey: "presetGooglePlaySmall", rate: 15  },
 ] as const;
 import { Plus, Trash2, PackagePlus, Building2, Users, Percent } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -294,13 +294,13 @@ export function ExpenseCard({
           <div className="flex flex-wrap gap-1.5">
             {TRANSACTION_FEE_PRESETS.map((preset) => (
               <Button
-                key={preset.name}
+                key={preset.labelKey}
                 variant="outline"
                 size="sm"
                 className="h-7 px-2 text-xs"
-                onClick={() => onAddTransactionFee(preset)}
+                onClick={() => onAddTransactionFee({ name: t(preset.labelKey), rate: preset.rate })}
               >
-                {preset.name} {preset.rate}%
+                {t(preset.labelKey)} {preset.rate}%
               </Button>
             ))}
           </div>

@@ -24,7 +24,12 @@
     "transactionFeeNamePlaceholder": "項目名（例: Apple）",
     "transactionFeeRatePlaceholder": "手数料",
     "addTransactionFeeButton": "決済手数料を追加",
-    "feePercent": "%"
+    "feePercent": "%",
+    "presetStripe": "Stripe",
+    "presetAppStore": "App Store",
+    "presetAppStoreSmall": "App Store (小規模)",
+    "presetGooglePlay": "Google Play",
+    "presetGooglePlaySmall": "Google Play (小規模)"
   },
   "income": {
     "title": "収入",
@@ -141,7 +146,8 @@
     "title": "ユーザー数",
     "endPeriodUsers": "期間末ユーザー数",
     "endPeriodSubscribers": "期間末サブスク加入者数",
-    "suffix": "人"
+    "suffix": "人",
+    "unnamed": "（名称未設定）"
   },
   "milestone": {
     "title": "マイルストーン",

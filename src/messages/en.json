@@ -24,7 +24,12 @@
     "transactionFeeNamePlaceholder": "Item name (e.g., Apple)",
     "transactionFeeRatePlaceholder": "Fee",
     "addTransactionFeeButton": "Add Transaction Fee",
-    "feePercent": "%"
+    "feePercent": "%",
+    "presetStripe": "Stripe",
+    "presetAppStore": "App Store",
+    "presetAppStoreSmall": "App Store (Small Business)",
+    "presetGooglePlay": "Google Play",
+    "presetGooglePlaySmall": "Google Play (Small Business)"
   },
   "income": {
     "title": "Income",
@@ -141,7 +146,8 @@
     "title": "Users",
     "endPeriodUsers": "End-of-Period Users",
     "endPeriodSubscribers": "End-of-Period Subscribers",
-    "suffix": ""
+    "suffix": "",
+    "unnamed": "(Unnamed)"
   },
   "milestone": {
     "title": "Milestones",
