@@ -137,6 +137,20 @@
     "section7Title": "Changes to These Terms",
     "section7Content": "These Terms may be updated without prior notice. Continued use of the Service after changes constitutes acceptance of the revised Terms."
   },
+  "users": {
+    "title": "Users",
+    "endPeriodUsers": "End-of-Period Users",
+    "endPeriodSubscribers": "End-of-Period Subscribers",
+    "suffix": ""
+  },
+  "milestone": {
+    "title": "Milestones",
+    "milestone1": "¥50,000/mo (Side hustle)",
+    "milestone2": "¥300,000/mo (Go indie)",
+    "milestone3": "¥1,000,000/mo (Incorporate)",
+    "achieved": "Month {month}",
+    "notAchieved": "Not reached"
+  },
   "breakdown": {
     "expenseTitle": "Expense Breakdown",
     "incomeTitle": "Income Breakdown",

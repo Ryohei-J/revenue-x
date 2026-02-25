@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { CheckCircle2, Circle, Target } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -7,18 +8,20 @@ import { findIncomeMonth } from "@/lib/calc";
 import type { MonthlyData } from "@/types";
 
 const INCOME_MILESTONES = [
-  { label: "月収¥50,000（副業レベル）", threshold: 50_000 },
-  { label: "月収¥300,000（独立検討レベル）", threshold: 300_000 },
-  { label: "月収¥1,000,000（法人化検討レベル）", threshold: 1_000_000 },
-];
+  { labelKey: "milestone1", threshold: 50_000 },
+  { labelKey: "milestone2", threshold: 300_000 },
+  { labelKey: "milestone3", threshold: 1_000_000 },
+] as const;
 
 type Props = {
   data: MonthlyData[];
 };
 
 export function MilestoneCard({ data }: Props) {
+  const t = useTranslations("milestone");
+
   const milestones = INCOME_MILESTONES.map((m) => ({
-    label: m.label,
+    label: t(m.labelKey),
     achievedMonth: findIncomeMonth(data, m.threshold),
   }));
 
@@ -27,7 +30,7 @@ export function MilestoneCard({ data }: Props) {
       <CardHeader>
         <CardTitle className="flex items-center gap-1.5">
           <Target className="h-4 w-4" />
-          マイルストーン
+          {t("title")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -49,8 +52,8 @@ export function MilestoneCard({ data }: Props) {
                 )}
               >
                 {m.achievedMonth !== null
-                  ? `${m.achievedMonth}ヶ月目達成`
-                  : "未達成"}
+                  ? t("achieved", { month: m.achievedMonth })
+                  : t("notAchieved")}
               </span>
             </li>
           ))}
