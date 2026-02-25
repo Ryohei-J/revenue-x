@@ -1,6 +1,7 @@
 "use client";
 
 import { useSimulation } from "@/hooks/use-simulation";
+import { SettingsCard } from "@/components/settings-card";
 import { ExpenseCard } from "@/components/expense-card";
 import { IncomeCard } from "@/components/income-card";
 import { PeriodCard } from "@/components/period-card";
@@ -20,6 +21,11 @@ export default function HomePage() {
     <main className="container mx-auto p-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-4">
+          <SettingsCard
+            exchangeRate={sim.config.exchangeRate}
+            onExchangeRateChange={sim.setExchangeRate}
+            onRefresh={sim.refreshExchangeRate}
+          />
           <ExpenseCard
             initialCosts={sim.config.initialCosts}
             fixedExpenses={sim.config.fixedExpenses}

@@ -4,23 +4,26 @@ const STORAGE_KEY = "revenue-x-simulation";
 
 const DEFAULT_CONFIG: SimulationConfig = {
   initialCosts: [],
-  fixedExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
-  variableExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
+  fixedExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0, currency: "JPY", billingCycle: "monthly" as const }],
+  variableExpenses: [{ id: crypto.randomUUID(), name: "", amount: 0, currency: "JPY", billingCycle: "monthly" as const }],
   transactionFees: [],
   subscriptions: [
     {
       id: crypto.randomUUID(),
       name: "",
       amount: 0,
+      currency: "JPY",
+      billingCycle: "monthly" as const,
       conversionRate: 5,
       churnRate: 3,
     },
   ],
-  ads: [{ id: crypto.randomUUID(), name: "", amount: 0 }],
+  ads: [{ id: crypto.randomUUID(), name: "", amount: 0, currency: "JPY", billingCycle: "monthly" as const }],
   oneTimePurchases: [],
   periodMonths: 12,
   monthlyGrowthRate: 5,
   initialUsers: 100,
+  exchangeRate: 150,
 };
 
 export function loadConfig(): SimulationConfig {
@@ -76,6 +79,45 @@ export function loadConfig(): SimulationConfig {
     }
     if (!parsed.oneTimePurchases) {
       parsed.oneTimePurchases = [];
+    }
+
+    // exchangeRate マイグレーション
+    if (parsed.exchangeRate === undefined) {
+      parsed.exchangeRate = 150;
+    }
+
+    // currency フィールドのマイグレーション
+    for (const arr of [
+      "initialCosts",
+      "fixedExpenses",
+      "variableExpenses",
+      "subscriptions",
+      "ads",
+      "oneTimePurchases",
+    ]) {
+      if (parsed[arr]) {
+        for (const item of parsed[arr]) {
+          if (item.currency === undefined) {
+            item.currency = "JPY";
+          }
+        }
+      }
+    }
+
+    // billingCycle フィールドのマイグレーション（定期的な項目のみ）
+    for (const arr of [
+      "fixedExpenses",
+      "variableExpenses",
+      "subscriptions",
+      "ads",
+    ]) {
+      if (parsed[arr]) {
+        for (const item of parsed[arr]) {
+          if (item.billingCycle === undefined) {
+            item.billingCycle = "monthly";
+          }
+        }
+      }
     }
 
     return parsed as SimulationConfig;

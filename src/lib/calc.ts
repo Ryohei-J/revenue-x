@@ -1,4 +1,12 @@
-import type { SimulationConfig, MonthlyData, BreakdownData } from "@/types";
+import type { SimulationConfig, MonthlyData, BreakdownData, Currency, BillingCycle } from "@/types";
+
+function toJPY(amount: number, currency: Currency, exchangeRate: number): number {
+  return currency === "USD" ? amount * exchangeRate : amount;
+}
+
+function toMonthly(amount: number, billingCycle: BillingCycle): number {
+  return billingCycle === "yearly" ? amount / 12 : amount;
+}
 
 // 月次シミュレーションデータを計算する
 // ユーザー数: initialUsers × (1 + growthRate/100)^(n-1)
@@ -19,25 +27,29 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
     periodMonths,
     monthlyGrowthRate,
     initialUsers,
+    exchangeRate,
   } = config;
 
   const initialCostTotal = initialCosts.reduce(
-    (sum, e) => sum + e.amount,
+    (sum, e) => sum + toJPY(e.amount, e.currency, exchangeRate),
     0
   );
   const fixedExpensePerMonth = fixedExpenses.reduce(
-    (sum, e) => sum + e.amount,
+    (sum, e) => sum + toMonthly(toJPY(e.amount, e.currency, exchangeRate), e.billingCycle),
     0
   );
   const variableCostPerUser = variableExpenses.reduce(
-    (sum, e) => sum + e.amount,
+    (sum, e) => sum + toMonthly(toJPY(e.amount, e.currency, exchangeRate), e.billingCycle),
     0
   );
   const totalFeeRate = transactionFees.reduce(
     (sum, f) => sum + f.rate,
     0
   );
-  const adRevenuePerUser = ads.reduce((sum, a) => sum + a.amount, 0);
+  const adRevenuePerUser = ads.reduce(
+    (sum, a) => sum + toMonthly(toJPY(a.amount, a.currency, exchangeRate), a.billingCycle),
+    0
+  );
   const growthMultiplier = 1 + monthlyGrowthRate / 100;
 
   // プランごとの前月契約者数を追跡
@@ -70,13 +82,13 @@ export function calculateSimulation(config: SimulationConfig): MonthlyData[] {
 
       prevSubscribersByPlan.set(sub.id, currentSubs);
       totalSubscribers += currentSubs;
-      subscriptionIncome += sub.amount * currentSubs;
+      subscriptionIncome += toMonthly(toJPY(sub.amount, sub.currency, exchangeRate), sub.billingCycle) * currentSubs;
     }
 
     // 買い切り収入: 当月新規ユーザーのうち購入率分が購入
     let oneTimePurchaseIncome = 0;
     for (const otp of oneTimePurchases) {
-      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * otp.amount;
+      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * toJPY(otp.amount, otp.currency, exchangeRate);
     }
 
     const adIncome = adRevenuePerUser * users;
@@ -127,13 +139,23 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
     periodMonths,
     monthlyGrowthRate,
     initialUsers,
+    exchangeRate,
   } = config;
 
-  const initialCostTotal = initialCosts.reduce((sum, e) => sum + e.amount, 0);
-  const fixedExpensePerMonth = fixedExpenses.reduce((sum, e) => sum + e.amount, 0);
-  const variableCostPerUser = variableExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const initialCostTotal = initialCosts.reduce((sum, e) => sum + toJPY(e.amount, e.currency, exchangeRate), 0);
+  const fixedExpensePerMonth = fixedExpenses.reduce(
+    (sum, e) => sum + toMonthly(toJPY(e.amount, e.currency, exchangeRate), e.billingCycle),
+    0
+  );
+  const variableCostPerUser = variableExpenses.reduce(
+    (sum, e) => sum + toMonthly(toJPY(e.amount, e.currency, exchangeRate), e.billingCycle),
+    0
+  );
   const totalFeeRate = transactionFees.reduce((sum, f) => sum + f.rate, 0);
-  const adRevenuePerUser = ads.reduce((sum, a) => sum + a.amount, 0);
+  const adRevenuePerUser = ads.reduce(
+    (sum, a) => sum + toMonthly(toJPY(a.amount, a.currency, exchangeRate), a.billingCycle),
+    0
+  );
   const growthMultiplier = 1 + monthlyGrowthRate / 100;
 
   const prevSubscribersByPlan = new Map<string, number>();
@@ -162,12 +184,12 @@ export function calculateBreakdown(config: SimulationConfig): BreakdownData {
       const churned = prevSubs * (sub.churnRate / 100);
       const currentSubs = Math.max(0, prevSubs - churned + newSubs);
       prevSubscribersByPlan.set(sub.id, currentSubs);
-      subscriptionIncome += sub.amount * currentSubs;
+      subscriptionIncome += toMonthly(toJPY(sub.amount, sub.currency, exchangeRate), sub.billingCycle) * currentSubs;
     }
 
     let oneTimePurchaseIncome = 0;
     for (const otp of oneTimePurchases) {
-      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * otp.amount;
+      oneTimePurchaseIncome += newUsers * (otp.conversionRate / 100) * toJPY(otp.amount, otp.currency, exchangeRate);
     }
 
     const adIncome = adRevenuePerUser * users;

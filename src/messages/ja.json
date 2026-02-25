@@ -7,22 +7,22 @@
     "title": "支出",
     "initialCostTitle": "初期費用",
     "initialCostNamePlaceholder": "項目名（例: PC購入代）",
-    "initialCostAmountPlaceholder": "金額（円）",
+    "initialCostAmountPlaceholder": "金額",
     "addInitialCostButton": "初期費用を追加",
     "oneTime": "1回",
     "fixedTitle": "固定費",
     "variableTitle": "変動費（ユーザーあたり）",
     "namePlaceholder": "項目名（例: サーバー代）",
-    "amountPlaceholder": "月額（円）",
+    "amountPlaceholder": "月額",
     "variableNamePlaceholder": "項目名（例: API利用料）",
-    "variableAmountPlaceholder": "単価（円）",
+    "variableAmountPlaceholder": "単価",
     "addFixedButton": "固定費を追加",
     "addVariableButton": "変動費を追加",
     "perMonth": "/月",
     "perUserMonth": "/ユーザー/月",
     "transactionFeeTitle": "決済手数料",
     "transactionFeeNamePlaceholder": "項目名（例: Apple）",
-    "transactionFeeRatePlaceholder": "手数料（%）",
+    "transactionFeeRatePlaceholder": "手数料",
     "addTransactionFeeButton": "決済手数料を追加",
     "feePercent": "%"
   },
@@ -30,28 +30,28 @@
     "title": "収入",
     "subscriptionTitle": "サブスクリプション",
     "subscriptionNamePlaceholder": "プラン名（例: Proプラン）",
-    "subscriptionAmountPlaceholder": "月額（円）",
+    "subscriptionAmountPlaceholder": "月額",
     "addSubscriptionButton": "プランを追加",
     "perSubscriberMonth": "/契約者/月",
-    "conversionRate": "課金率（%）",
-    "churnRate": "解約率（%）",
+    "conversionRate": "課金率",
+    "churnRate": "解約率",
     "adTitle": "広告",
     "adNamePlaceholder": "項目名（例: バナー広告）",
-    "adAmountPlaceholder": "単価（円）",
+    "adAmountPlaceholder": "単価",
     "addAdButton": "広告を追加",
     "perUserMonth": "/ユーザー/月",
     "oneTimePurchaseTitle": "買い切り",
     "oneTimePurchaseNamePlaceholder": "アプリ名（例: ProApp）",
-    "oneTimePurchaseAmountPlaceholder": "販売価格（円）",
+    "oneTimePurchaseAmountPlaceholder": "販売価格",
     "perSale": "/件",
-    "purchaseConversionRate": "購入率（%）",
+    "purchaseConversionRate": "購入率",
     "addOneTimePurchaseButton": "買い切りを追加"
   },
   "period": {
     "title": "ユーザー・期間設定",
     "initialUsers": "初期ユーザー数",
-    "months": "計算期間（月）",
-    "growthRate": "月次成長率（%）"
+    "months": "計算期間",
+    "growthRate": "月次成長率"
   },
   "chart": {
     "title": "収支シミュレーション",
@@ -61,7 +61,7 @@
     "users": "ユーザー数",
     "bep": "損益分岐点",
     "month": "月",
-    "amount": "金額（円）",
+    "amount": "金額",
     "currencyPrefix": "¥",
     "userSuffix": "人",
     "unitSmall": "万",
@@ -88,7 +88,9 @@
     "noData": "---"
   },
   "common": {
-    "delete": "削除"
+    "delete": "削除",
+    "monthly": "/月",
+    "yearly": "/年"
   },
   "footer": {
     "copyright": "© 2026 RevenueX",
@@ -145,6 +147,12 @@
     "oneTimePurchase": "買い切り",
     "ad": "広告",
     "noData": "データなし"
+  },
+  "settings": {
+    "title": "設定",
+    "exchangeRateLabel": "為替レート (USD/JPY)",
+    "exchangeRateDescription": "Frankfurter APIから自動取得。手動で上書き可能です。",
+    "refreshTooltip": "最新レートを取得"
   },
   "legal": {
     "backToHome": "ホームに戻る"

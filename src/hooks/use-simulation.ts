@@ -14,6 +14,7 @@ import type {
 } from "@/types";
 import { calculateSimulation } from "@/lib/calc";
 import { loadConfig, createDebouncedSave } from "@/lib/storage";
+import { fetchUSDJPYRate } from "@/lib/exchange-rate";
 
 export function useSimulation() {
   const [config, setConfig] = useState<SimulationConfig | null>(null);
@@ -24,6 +25,17 @@ export function useSimulation() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage同期
     setConfig(loadConfig());
+  }, []);
+
+  // マウント時に最新の為替レートを取得
+  useEffect(() => {
+    fetchUSDJPYRate()
+      .then(({ rate }) => {
+        setConfig((prev) => (prev ? { ...prev, exchangeRate: rate } : prev));
+      })
+      .catch(() => {
+        // API失敗時は保存済みレート/デフォルトを使用
+      });
   }, []);
 
   // config変更時にdebounced save（初回ロードはスキップ）
@@ -42,6 +54,21 @@ export function useSimulation() {
     return calculateSimulation(config);
   }, [config]);
 
+  // --- 為替レート操作 ---
+  const setExchangeRate = useCallback((rate: number) => {
+    setConfig((prev) => (prev ? { ...prev, exchangeRate: rate } : prev));
+  }, []);
+
+  const refreshExchangeRate = useCallback(() => {
+    fetchUSDJPYRate()
+      .then(({ rate }) => {
+        setConfig((prev) => (prev ? { ...prev, exchangeRate: rate } : prev));
+      })
+      .catch(() => {
+        // API失敗時は現在のレートを維持
+      });
+  }, []);
+
   // --- 初期費用操作 ---
   const addInitialCost = useCallback(() => {
     setConfig((prev) => {
@@ -50,13 +77,14 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
       };
       return { ...prev, initialCosts: [...prev.initialCosts, newItem] };
     });
   }, []);
 
   const updateInitialCost = useCallback(
-    (id: string, field: "name" | "amount", value: string | number) => {
+    (id: string, field: "name" | "amount" | "currency", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
@@ -88,13 +116,15 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
+        billingCycle: "monthly",
       };
       return { ...prev, fixedExpenses: [...prev.fixedExpenses, newItem] };
     });
   }, []);
 
   const updateFixedExpense = useCallback(
-    (id: string, field: "name" | "amount", value: string | number) => {
+    (id: string, field: "name" | "amount" | "currency" | "billingCycle", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
@@ -126,13 +156,15 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
+        billingCycle: "monthly",
       };
       return { ...prev, variableExpenses: [...prev.variableExpenses, newItem] };
     });
   }, []);
 
   const updateVariableExpense = useCallback(
-    (id: string, field: "name" | "amount", value: string | number) => {
+    (id: string, field: "name" | "amount" | "currency" | "billingCycle", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
@@ -202,6 +234,8 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
+        billingCycle: "monthly",
         conversionRate: 5,
         churnRate: 3,
       };
@@ -212,7 +246,7 @@ export function useSimulation() {
   const updateSubscription = useCallback(
     (
       id: string,
-      field: "name" | "amount" | "conversionRate" | "churnRate",
+      field: "name" | "amount" | "currency" | "billingCycle" | "conversionRate" | "churnRate",
       value: string | number
     ) => {
       setConfig((prev) => {
@@ -246,13 +280,15 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
+        billingCycle: "monthly",
       };
       return { ...prev, ads: [...prev.ads, newItem] };
     });
   }, []);
 
   const updateAd = useCallback(
-    (id: string, field: "name" | "amount", value: string | number) => {
+    (id: string, field: "name" | "amount" | "currency" | "billingCycle", value: string | number) => {
       setConfig((prev) => {
         if (!prev) return prev;
         return {
@@ -281,6 +317,7 @@ export function useSimulation() {
         id: crypto.randomUUID(),
         name: "",
         amount: 0,
+        currency: "JPY",
         conversionRate: 10,
       };
       return { ...prev, oneTimePurchases: [...prev.oneTimePurchases, newItem] };
@@ -290,7 +327,7 @@ export function useSimulation() {
   const updateOneTimePurchase = useCallback(
     (
       id: string,
-      field: "name" | "amount" | "conversionRate",
+      field: "name" | "amount" | "currency" | "conversionRate",
       value: string | number
     ) => {
       setConfig((prev) => {
@@ -334,6 +371,8 @@ export function useSimulation() {
   return {
     config,
     chartData,
+    setExchangeRate,
+    refreshExchangeRate,
     addInitialCost,
     updateInitialCost,
     removeInitialCost,

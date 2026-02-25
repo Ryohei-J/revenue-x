@@ -5,6 +5,8 @@ import { Plus, Trash2, PackagePlus, Building2, Users, Percent } from "lucide-rea
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CurrencyToggle } from "@/components/currency-toggle";
+import { BillingCycleToggle } from "@/components/billing-cycle-toggle";
 import type {
   InitialCostItem,
   FixedExpenseItem,
@@ -20,21 +22,21 @@ type Props = {
   onAddInitialCost: () => void;
   onUpdateInitialCost: (
     id: string,
-    field: "name" | "amount",
+    field: "name" | "amount" | "currency",
     value: string | number
   ) => void;
   onRemoveInitialCost: (id: string) => void;
   onAddFixed: () => void;
   onUpdateFixed: (
     id: string,
-    field: "name" | "amount",
+    field: "name" | "amount" | "currency" | "billingCycle",
     value: string | number
   ) => void;
   onRemoveFixed: (id: string) => void;
   onAddVariable: () => void;
   onUpdateVariable: (
     id: string,
-    field: "name" | "amount",
+    field: "name" | "amount" | "currency" | "billingCycle",
     value: string | number
   ) => void;
   onRemoveVariable: (id: string) => void;
@@ -89,6 +91,10 @@ export function ExpenseCard({
                 }
                 className="flex-1"
               />
+              <CurrencyToggle
+                currency={item.currency}
+                onChange={(c) => onUpdateInitialCost(item.id, "currency", c)}
+              />
               <Input
                 type="number"
                 placeholder={t("initialCostAmountPlaceholder")}
@@ -100,7 +106,7 @@ export function ExpenseCard({
                     Number(e.target.value) || 0
                   )
                 }
-                className="w-32"
+                className="w-24"
               />
               <span className="text-sm text-muted-foreground whitespace-nowrap">
                 {t("oneTime")}
@@ -139,6 +145,10 @@ export function ExpenseCard({
                 onChange={(e) => onUpdateFixed(item.id, "name", e.target.value)}
                 className="flex-1"
               />
+              <CurrencyToggle
+                currency={item.currency}
+                onChange={(c) => onUpdateFixed(item.id, "currency", c)}
+              />
               <Input
                 type="number"
                 placeholder={t("amountPlaceholder")}
@@ -146,11 +156,12 @@ export function ExpenseCard({
                 onChange={(e) =>
                   onUpdateFixed(item.id, "amount", Number(e.target.value) || 0)
                 }
-                className="w-32"
+                className="w-24"
               />
-              <span className="text-sm text-muted-foreground whitespace-nowrap">
-                {t("perMonth")}
-              </span>
+              <BillingCycleToggle
+                billingCycle={item.billingCycle}
+                onChange={(bc) => onUpdateFixed(item.id, "billingCycle", bc)}
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -187,6 +198,10 @@ export function ExpenseCard({
                 }
                 className="flex-1"
               />
+              <CurrencyToggle
+                currency={item.currency}
+                onChange={(c) => onUpdateVariable(item.id, "currency", c)}
+              />
               <Input
                 type="number"
                 placeholder={t("variableAmountPlaceholder")}
@@ -198,11 +213,12 @@ export function ExpenseCard({
                     Number(e.target.value) || 0
                   )
                 }
-                className="w-32"
+                className="w-24"
               />
-              <span className="text-sm text-muted-foreground whitespace-nowrap">
-                {t("perUserMonth")}
-              </span>
+              <BillingCycleToggle
+                billingCycle={item.billingCycle}
+                onChange={(bc) => onUpdateVariable(item.id, "billingCycle", bc)}
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -250,7 +266,7 @@ export function ExpenseCard({
                     Number(e.target.value) || 0
                   )
                 }
-                className="w-32"
+                className="w-24"
                 step={0.1}
                 min={0}
                 max={100}

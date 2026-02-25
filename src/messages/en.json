@@ -7,22 +7,22 @@
     "title": "Expenses",
     "initialCostTitle": "Initial Costs",
     "initialCostNamePlaceholder": "Item name (e.g., PC)",
-    "initialCostAmountPlaceholder": "Amount (JPY)",
+    "initialCostAmountPlaceholder": "Amount",
     "addInitialCostButton": "Add Initial Cost",
     "oneTime": "once",
     "fixedTitle": "Fixed Costs",
     "variableTitle": "Variable Costs (per user)",
     "namePlaceholder": "Item name (e.g., Server)",
-    "amountPlaceholder": "Monthly (JPY)",
+    "amountPlaceholder": "Monthly",
     "variableNamePlaceholder": "Item name (e.g., API usage)",
-    "variableAmountPlaceholder": "Unit cost (JPY)",
+    "variableAmountPlaceholder": "Unit cost",
     "addFixedButton": "Add Fixed Cost",
     "addVariableButton": "Add Variable Cost",
     "perMonth": "/mo",
     "perUserMonth": "/user/mo",
     "transactionFeeTitle": "Transaction Fees",
     "transactionFeeNamePlaceholder": "Item name (e.g., Apple)",
-    "transactionFeeRatePlaceholder": "Fee (%)",
+    "transactionFeeRatePlaceholder": "Fee",
     "addTransactionFeeButton": "Add Transaction Fee",
     "feePercent": "%"
   },
@@ -30,28 +30,28 @@
     "title": "Income",
     "subscriptionTitle": "Subscriptions",
     "subscriptionNamePlaceholder": "Plan name (e.g., Pro Plan)",
-    "subscriptionAmountPlaceholder": "Monthly (JPY)",
+    "subscriptionAmountPlaceholder": "Monthly",
     "addSubscriptionButton": "Add Plan",
     "perSubscriberMonth": "/sub/mo",
-    "conversionRate": "Conversion Rate (%)",
-    "churnRate": "Churn Rate (%)",
+    "conversionRate": "Conversion Rate",
+    "churnRate": "Churn Rate",
     "adTitle": "Advertising",
     "adNamePlaceholder": "Item name (e.g., Banner Ad)",
-    "adAmountPlaceholder": "Unit price (JPY)",
+    "adAmountPlaceholder": "Unit price",
     "addAdButton": "Add Ad",
     "perUserMonth": "/user/mo",
     "oneTimePurchaseTitle": "One-Time Purchase",
     "oneTimePurchaseNamePlaceholder": "App name (e.g., ProApp)",
-    "oneTimePurchaseAmountPlaceholder": "Sale price (JPY)",
+    "oneTimePurchaseAmountPlaceholder": "Sale price",
     "perSale": "/sale",
-    "purchaseConversionRate": "Purchase Rate (%)",
+    "purchaseConversionRate": "Purchase Rate",
     "addOneTimePurchaseButton": "Add One-Time Purchase"
   },
   "period": {
     "title": "Users & Period",
     "initialUsers": "Initial Users",
-    "months": "Calculation Period (months)",
-    "growthRate": "Monthly Growth Rate (%)"
+    "months": "Calculation Period",
+    "growthRate": "Monthly Growth Rate"
   },
   "chart": {
     "title": "Revenue Simulation",
@@ -61,7 +61,7 @@
     "users": "Users",
     "bep": "BEP",
     "month": "Month",
-    "amount": "Amount (JPY)",
+    "amount": "Amount",
     "currencyPrefix": "¥",
     "userSuffix": "",
     "unitSmall": "K",
@@ -88,7 +88,9 @@
     "noData": "---"
   },
   "common": {
-    "delete": "Delete"
+    "delete": "Delete",
+    "monthly": "/mo",
+    "yearly": "/yr"
   },
   "footer": {
     "copyright": "© 2026 RevenueX",
@@ -145,6 +147,12 @@
     "oneTimePurchase": "One-Time Purchase",
     "ad": "Advertising",
     "noData": "No Data"
+  },
+  "settings": {
+    "title": "Settings",
+    "exchangeRateLabel": "Exchange Rate (USD/JPY)",
+    "exchangeRateDescription": "Auto-fetched from Frankfurter API. You can override manually.",
+    "refreshTooltip": "Fetch latest rate"
   },
   "legal": {
     "backToHome": "Back to Home"

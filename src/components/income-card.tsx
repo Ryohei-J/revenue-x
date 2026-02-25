@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CurrencyToggle } from "@/components/currency-toggle";
+import { BillingCycleToggle } from "@/components/billing-cycle-toggle";
 import type { SubscriptionItem, AdItem, OneTimePurchaseItem } from "@/types";
 
 type Props = {
@@ -15,21 +17,21 @@ type Props = {
   onAddSubscription: () => void;
   onUpdateSubscription: (
     id: string,
-    field: "name" | "amount" | "conversionRate" | "churnRate",
+    field: "name" | "amount" | "currency" | "billingCycle" | "conversionRate" | "churnRate",
     value: string | number
   ) => void;
   onRemoveSubscription: (id: string) => void;
   onAddAd: () => void;
   onUpdateAd: (
     id: string,
-    field: "name" | "amount",
+    field: "name" | "amount" | "currency" | "billingCycle",
     value: string | number
   ) => void;
   onRemoveAd: (id: string) => void;
   onAddOneTimePurchase: () => void;
   onUpdateOneTimePurchase: (
     id: string,
-    field: "name" | "amount" | "conversionRate",
+    field: "name" | "amount" | "currency" | "conversionRate",
     value: string | number
   ) => void;
   onRemoveOneTimePurchase: (id: string) => void;
@@ -77,6 +79,10 @@ export function IncomeCard({
                   }
                   className="flex-1"
                 />
+                <CurrencyToggle
+                  currency={item.currency}
+                  onChange={(c) => onUpdateSubscription(item.id, "currency", c)}
+                />
                 <Input
                   type="number"
                   placeholder={t("subscriptionAmountPlaceholder")}
@@ -88,21 +94,15 @@ export function IncomeCard({
                       Number(e.target.value) || 0
                     )
                   }
-                  className="w-32"
+                  className="w-24"
                 />
-                <span className="text-sm text-muted-foreground whitespace-nowrap">
-                  {t("perSubscriberMonth")}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onRemoveSubscription(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <BillingCycleToggle
+                  billingCycle={item.billingCycle}
+                  onChange={(bc) => onUpdateSubscription(item.id, "billingCycle", bc)}
+                />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
+              <div className="flex items-end gap-3">
+                <div className="flex-1 space-y-1">
                   <Label className="text-xs">
                     {t("conversionRate")}
                   </Label>
@@ -121,7 +121,7 @@ export function IncomeCard({
                     }
                   />
                 </div>
-                <div className="space-y-1">
+                <div className="flex-1 space-y-1">
                   <Label className="text-xs">
                     {t("churnRate")}
                   </Label>
@@ -140,6 +140,14 @@ export function IncomeCard({
                     }
                   />
                 </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="shrink-0"
+                  onClick={() => onRemoveSubscription(item.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </div>
             </div>
           ))}
@@ -171,6 +179,10 @@ export function IncomeCard({
                   }
                   className="flex-1"
                 />
+                <CurrencyToggle
+                  currency={item.currency}
+                  onChange={(c) => onUpdateOneTimePurchase(item.id, "currency", c)}
+                />
                 <Input
                   type="number"
                   placeholder={t("oneTimePurchaseAmountPlaceholder")}
@@ -182,7 +194,7 @@ export function IncomeCard({
                       Number(e.target.value) || 0
                     )
                   }
-                  className="w-32"
+                  className="w-24"
                 />
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
                   {t("perSale")}
@@ -239,6 +251,10 @@ export function IncomeCard({
                 onChange={(e) => onUpdateAd(item.id, "name", e.target.value)}
                 className="flex-1"
               />
+              <CurrencyToggle
+                currency={item.currency}
+                onChange={(c) => onUpdateAd(item.id, "currency", c)}
+              />
               <Input
                 type="number"
                 placeholder={t("adAmountPlaceholder")}
@@ -248,9 +264,10 @@ export function IncomeCard({
                 }
                 className="w-32"
               />
-              <span className="text-sm text-muted-foreground whitespace-nowrap">
-                {t("perUserMonth")}
-              </span>
+              <BillingCycleToggle
+                billingCycle={item.billingCycle}
+                onChange={(bc) => onUpdateAd(item.id, "billingCycle", bc)}
+              />
               <Button
                 variant="ghost"
                 size="icon"

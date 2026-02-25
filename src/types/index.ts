@@ -1,25 +1,35 @@
+export type Currency = "JPY" | "USD";
+export type BillingCycle = "monthly" | "yearly";
+
 export type InitialCostItem = {
   id: string;
   name: string;
   amount: number; // 初期費用（円）、1ヶ月目のみ計上
+  currency: Currency;
 };
 
 export type FixedExpenseItem = {
   id: string;
   name: string;
-  amount: number; // 月額（円）
+  amount: number; // 月額 or 年額
+  currency: Currency;
+  billingCycle: BillingCycle;
 };
 
 export type VariableExpenseItem = {
   id: string;
   name: string;
-  amount: number; // 1ユーザーあたり月額（円）
+  amount: number; // 1ユーザーあたり月額 or 年額
+  currency: Currency;
+  billingCycle: BillingCycle;
 };
 
 export type SubscriptionItem = {
   id: string;
   name: string;
-  amount: number; // 1契約者あたり月額（円）
+  amount: number; // 1契約者あたり月額 or 年額
+  currency: Currency;
+  billingCycle: BillingCycle;
   conversionRate: number; // 課金率（%）
   churnRate: number; // 解約率（%）
 };
@@ -27,13 +37,16 @@ export type SubscriptionItem = {
 export type AdItem = {
   id: string;
   name: string;
-  amount: number; // 1ユーザーあたり月額（円）
+  amount: number; // 1ユーザーあたり月額 or 年額
+  currency: Currency;
+  billingCycle: BillingCycle;
 };
 
 export type OneTimePurchaseItem = {
   id: string;
   name: string;
   amount: number;         // 販売価格（円）
+  currency: Currency;
   conversionRate: number; // 購入率（%）- 新規ユーザーのうち購入する割合
 };
 
@@ -54,6 +67,7 @@ export type SimulationConfig = {
   periodMonths: number; // 計算期間（月）
   monthlyGrowthRate: number; // 月次成長率（%）
   initialUsers: number; // 初期ユーザー数
+  exchangeRate: number; // USD/JPYレート
 };
 
 export type MonthlyData = {

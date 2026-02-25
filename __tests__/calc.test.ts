@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   calculateSimulation,
+  calculateBreakdown,
   findBreakEvenMonth,
   getMaxCumulativeDeficit,
 } from "@/lib/calc";
@@ -21,6 +22,7 @@ function makeConfig(
     periodMonths: 0,
     monthlyGrowthRate: 0,
     initialUsers: 0,
+    exchangeRate: 150,
     ...overrides,
   };
 }
@@ -33,8 +35,8 @@ describe("calculateSimulation", () => {
 
   it("calculates flat ad income with 0% growth", () => {
     const config = makeConfig({
-      fixedExpenses: [{ id: "1", name: "Server", amount: 2000 }],
-      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 2000, currency: "JPY", billingCycle: "monthly" }],
+      ads: [{ id: "1", name: "Banner", amount: 50, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 3,
       initialUsers: 100,
     });
@@ -56,8 +58,8 @@ describe("calculateSimulation", () => {
 
   it("applies compound growth to user count and ad income", () => {
     const config = makeConfig({
-      fixedExpenses: [{ id: "1", name: "Server", amount: 1000 }],
-      ads: [{ id: "1", name: "Banner", amount: 100 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" }],
+      ads: [{ id: "1", name: "Banner", amount: 100, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 2,
       monthlyGrowthRate: 10,
       initialUsers: 100,
@@ -69,8 +71,8 @@ describe("calculateSimulation", () => {
 
   it("handles negative profit (loss)", () => {
     const config = makeConfig({
-      fixedExpenses: [{ id: "1", name: "Server", amount: 10000 }],
-      ads: [{ id: "1", name: "Banner", amount: 10 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 10000, currency: "JPY", billingCycle: "monthly" }],
+      ads: [{ id: "1", name: "Banner", amount: 10, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 2,
       initialUsers: 100,
     });
@@ -82,12 +84,12 @@ describe("calculateSimulation", () => {
   it("handles multiple expense and income items", () => {
     const config = makeConfig({
       fixedExpenses: [
-        { id: "1", name: "Server", amount: 2000 },
-        { id: "2", name: "API", amount: 3000 },
+        { id: "1", name: "Server", amount: 2000, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "API", amount: 3000, currency: "JPY", billingCycle: "monthly" },
       ],
       ads: [
-        { id: "1", name: "Banner", amount: 40 },
-        { id: "2", name: "Native", amount: 60 },
+        { id: "1", name: "Banner", amount: 40, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "Native", amount: 60, currency: "JPY", billingCycle: "monthly" },
       ],
       periodMonths: 1,
       initialUsers: 100,
@@ -100,9 +102,9 @@ describe("calculateSimulation", () => {
 
   it("calculates variable expenses based on user count", () => {
     const config = makeConfig({
-      fixedExpenses: [{ id: "1", name: "Server", amount: 1000 }],
-      variableExpenses: [{ id: "1", name: "API calls", amount: 10 }],
-      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" }],
+      variableExpenses: [{ id: "1", name: "API calls", amount: 10, currency: "JPY", billingCycle: "monthly" }],
+      ads: [{ id: "1", name: "Banner", amount: 50, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 1,
       initialUsers: 100,
     });
@@ -113,7 +115,7 @@ describe("calculateSimulation", () => {
 
   it("grows user count with monthly growth rate", () => {
     const config = makeConfig({
-      variableExpenses: [{ id: "1", name: "API", amount: 5 }],
+      variableExpenses: [{ id: "1", name: "API", amount: 5, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 3,
       monthlyGrowthRate: 10,
       initialUsers: 100,
@@ -129,7 +131,7 @@ describe("calculateSimulation", () => {
 
   it("handles 0 initial users", () => {
     const config = makeConfig({
-      variableExpenses: [{ id: "1", name: "API", amount: 10 }],
+      variableExpenses: [{ id: "1", name: "API", amount: 10, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 2,
       monthlyGrowthRate: 10,
       initialUsers: 0,
@@ -143,7 +145,7 @@ describe("calculateSimulation", () => {
   it("calculates per-plan subscription income with conversion and churn", () => {
     const config = makeConfig({
       subscriptions: [
-        { id: "1", name: "Pro", amount: 1000, conversionRate: 10, churnRate: 0 },
+        { id: "1", name: "Pro", amount: 1000, currency: "JPY", billingCycle: "monthly", conversionRate: 10, churnRate: 0 },
       ],
       periodMonths: 3,
       initialUsers: 100,
@@ -165,6 +167,8 @@ describe("calculateSimulation", () => {
           id: "1",
           name: "Pro",
           amount: 1000,
+          currency: "JPY",
+          billingCycle: "monthly",
           conversionRate: 10,
           churnRate: 50,
         },
@@ -187,6 +191,8 @@ describe("calculateSimulation", () => {
           id: "1",
           name: "Basic",
           amount: 500,
+          currency: "JPY",
+          billingCycle: "monthly",
           conversionRate: 20,
           churnRate: 0,
         },
@@ -194,6 +200,8 @@ describe("calculateSimulation", () => {
           id: "2",
           name: "Pro",
           amount: 2000,
+          currency: "JPY",
+          billingCycle: "monthly",
           conversionRate: 5,
           churnRate: 0,
         },
@@ -211,9 +219,9 @@ describe("calculateSimulation", () => {
   it("combines subscription and ad income", () => {
     const config = makeConfig({
       subscriptions: [
-        { id: "1", name: "Pro", amount: 500, conversionRate: 5, churnRate: 0 },
+        { id: "1", name: "Pro", amount: 500, currency: "JPY", billingCycle: "monthly", conversionRate: 5, churnRate: 0 },
       ],
-      ads: [{ id: "1", name: "Banner", amount: 10 }],
+      ads: [{ id: "1", name: "Banner", amount: 10, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 1,
       initialUsers: 200,
     });
@@ -301,8 +309,8 @@ describe("findBreakEvenMonth", () => {
 
   it("works with calculateSimulation output end-to-end", () => {
     const config = makeConfig({
-      fixedExpenses: [{ id: "1", name: "Server", amount: 10000 }],
-      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 10000, currency: "JPY", billingCycle: "monthly" }],
+      ads: [{ id: "1", name: "Banner", amount: 50, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 24,
       monthlyGrowthRate: 20,
       initialUsers: 100,
@@ -349,8 +357,8 @@ describe("getMaxCumulativeDeficit", () => {
 describe("initial costs", () => {
   it("applies initial costs only in month 1", () => {
     const config = makeConfig({
-      initialCosts: [{ id: "1", name: "PC", amount: 200000 }],
-      fixedExpenses: [{ id: "1", name: "Server", amount: 1000 }],
+      initialCosts: [{ id: "1", name: "PC", amount: 200000, currency: "JPY" }],
+      fixedExpenses: [{ id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 3,
       initialUsers: 100,
     });
@@ -365,8 +373,8 @@ describe("initial costs", () => {
   it("handles multiple initial cost items", () => {
     const config = makeConfig({
       initialCosts: [
-        { id: "1", name: "PC", amount: 200000 },
-        { id: "2", name: "Desk", amount: 50000 },
+        { id: "1", name: "PC", amount: 200000, currency: "JPY" },
+        { id: "2", name: "Desk", amount: 50000, currency: "JPY" },
       ],
       periodMonths: 2,
       initialUsers: 100,
@@ -382,7 +390,7 @@ describe("transaction fees", () => {
     const config = makeConfig({
       transactionFees: [{ id: "1", name: "Apple", rate: 30 }],
       subscriptions: [
-        { id: "1", name: "Pro", amount: 1000, conversionRate: 10, churnRate: 0 },
+        { id: "1", name: "Pro", amount: 1000, currency: "JPY", billingCycle: "monthly", conversionRate: 10, churnRate: 0 },
       ],
       periodMonths: 1,
       initialUsers: 100,
@@ -402,7 +410,7 @@ describe("transaction fees", () => {
         { id: "2", name: "Stripe", rate: 3.6 },
       ],
       subscriptions: [
-        { id: "1", name: "Pro", amount: 1000, conversionRate: 10, churnRate: 0 },
+        { id: "1", name: "Pro", amount: 1000, currency: "JPY", billingCycle: "monthly", conversionRate: 10, churnRate: 0 },
       ],
       periodMonths: 1,
       initialUsers: 100,
@@ -416,7 +424,7 @@ describe("transaction fees", () => {
   it("does not apply fee when there is no subscription income", () => {
     const config = makeConfig({
       transactionFees: [{ id: "1", name: "Apple", rate: 30 }],
-      ads: [{ id: "1", name: "Banner", amount: 50 }],
+      ads: [{ id: "1", name: "Banner", amount: 50, currency: "JPY", billingCycle: "monthly" }],
       periodMonths: 1,
       initialUsers: 100,
     });
@@ -427,3 +435,209 @@ describe("transaction fees", () => {
   });
 });
 
+describe("currency conversion", () => {
+  it("converts USD initial costs to JPY using exchange rate", () => {
+    const config = makeConfig({
+      initialCosts: [{ id: "1", name: "SaaS", amount: 100, currency: "USD" }],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 100 USD × 150 = 15000 JPY
+    expect(result[0].totalExpense).toBe(15000);
+  });
+
+  it("converts USD fixed expenses to JPY", () => {
+    const config = makeConfig({
+      fixedExpenses: [{ id: "1", name: "API", amount: 20, currency: "USD", billingCycle: "monthly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 20 USD × 150 = 3000 JPY
+    expect(result[0].totalExpense).toBe(3000);
+  });
+
+  it("mixes JPY and USD items correctly", () => {
+    const config = makeConfig({
+      fixedExpenses: [
+        { id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "API", amount: 10, currency: "USD", billingCycle: "monthly" },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 1000 JPY + (10 × 150) = 1000 + 1500 = 2500
+    expect(result[0].totalExpense).toBe(2500);
+  });
+
+  it("converts USD subscription amounts to JPY", () => {
+    const config = makeConfig({
+      subscriptions: [
+        {
+          id: "1",
+          name: "Pro",
+          amount: 10,
+          currency: "USD",
+          billingCycle: "monthly",
+          conversionRate: 10,
+          churnRate: 0,
+        },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 100 users × 10% = 10 subscribers × (10 USD × 150) = 15000
+    expect(result[0].totalIncome).toBe(15000);
+  });
+
+  it("converts USD variable expenses per user", () => {
+    const config = makeConfig({
+      variableExpenses: [{ id: "1", name: "API", amount: 1, currency: "USD", billingCycle: "monthly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 1 USD × 150 × 100 users = 15000
+    expect(result[0].totalExpense).toBe(15000);
+  });
+
+  it("converts USD ad revenue per user", () => {
+    const config = makeConfig({
+      ads: [{ id: "1", name: "Banner", amount: 0.5, currency: "USD", billingCycle: "monthly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 0.5 USD × 150 × 100 users = 7500
+    expect(result[0].totalIncome).toBe(7500);
+  });
+
+  it("converts USD one-time purchase amounts", () => {
+    const config = makeConfig({
+      oneTimePurchases: [
+        { id: "1", name: "App", amount: 5, currency: "USD", conversionRate: 10 },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 100 new users × 10% = 10 purchases × (5 USD × 150) = 7500
+    expect(result[0].totalIncome).toBe(7500);
+  });
+
+  it("applies currency conversion in breakdown calculation", () => {
+    const config = makeConfig({
+      fixedExpenses: [
+        { id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "API", amount: 10, currency: "USD", billingCycle: "monthly" },
+      ],
+      ads: [{ id: "1", name: "Banner", amount: 1, currency: "USD", billingCycle: "monthly" }],
+      periodMonths: 2,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const breakdown = calculateBreakdown(config);
+    // 固定費: (1000 + 10×150) × 2ヶ月 = 2500 × 2 = 5000
+    expect(breakdown.expense.fixedExpense).toBe(5000);
+    // 広告: (1×150) × 100ユーザー × 2ヶ月 = 15000 × 2 = 30000
+    expect(breakdown.income.ad).toBe(30000);
+  });
+});
+
+describe("billing cycle (yearly)", () => {
+  it("divides yearly fixed expense by 12 for monthly calculation", () => {
+    const config = makeConfig({
+      fixedExpenses: [{ id: "1", name: "Domain", amount: 12000, currency: "JPY", billingCycle: "yearly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 12000/年 ÷ 12 = 1000/月
+    expect(result[0].totalExpense).toBe(1000);
+  });
+
+  it("divides yearly variable expense by 12 per user", () => {
+    const config = makeConfig({
+      variableExpenses: [{ id: "1", name: "Annual license", amount: 1200, currency: "JPY", billingCycle: "yearly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 1200/年 ÷ 12 = 100/月 × 100ユーザー = 10000
+    expect(result[0].totalExpense).toBe(10000);
+  });
+
+  it("divides yearly subscription amount by 12 for monthly income", () => {
+    const config = makeConfig({
+      subscriptions: [
+        { id: "1", name: "Pro Annual", amount: 12000, currency: "JPY", billingCycle: "yearly", conversionRate: 10, churnRate: 0 },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 契約者 = 100 × 10% = 10, 月額 = 12000/12 = 1000, 収入 = 10 × 1000 = 10000
+    expect(result[0].totalIncome).toBe(10000);
+  });
+
+  it("divides yearly ad revenue by 12 per user", () => {
+    const config = makeConfig({
+      ads: [{ id: "1", name: "Sponsor", amount: 1200, currency: "JPY", billingCycle: "yearly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 1200/年 ÷ 12 = 100/月 × 100ユーザー = 10000
+    expect(result[0].totalIncome).toBe(10000);
+  });
+
+  it("mixes monthly and yearly items correctly", () => {
+    const config = makeConfig({
+      fixedExpenses: [
+        { id: "1", name: "Server", amount: 2000, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "Domain", amount: 12000, currency: "JPY", billingCycle: "yearly" },
+      ],
+      periodMonths: 1,
+      initialUsers: 100,
+    });
+    const result = calculateSimulation(config);
+    // 2000/月 + 12000/年÷12 = 2000 + 1000 = 3000
+    expect(result[0].totalExpense).toBe(3000);
+  });
+
+  it("applies both currency conversion and yearly billing", () => {
+    const config = makeConfig({
+      fixedExpenses: [{ id: "1", name: "SaaS", amount: 120, currency: "USD", billingCycle: "yearly" }],
+      periodMonths: 1,
+      initialUsers: 100,
+      exchangeRate: 150,
+    });
+    const result = calculateSimulation(config);
+    // 120 USD × 150 = 18000 JPY/年 ÷ 12 = 1500/月
+    expect(result[0].totalExpense).toBe(1500);
+  });
+
+  it("applies yearly billing in breakdown calculation", () => {
+    const config = makeConfig({
+      fixedExpenses: [
+        { id: "1", name: "Server", amount: 1000, currency: "JPY", billingCycle: "monthly" },
+        { id: "2", name: "Domain", amount: 6000, currency: "JPY", billingCycle: "yearly" },
+      ],
+      periodMonths: 2,
+      initialUsers: 100,
+    });
+    const breakdown = calculateBreakdown(config);
+    // 固定費: (1000 + 6000/12) × 2ヶ月 = 1500 × 2 = 3000
+    expect(breakdown.expense.fixedExpense).toBe(3000);
+  });
+});
